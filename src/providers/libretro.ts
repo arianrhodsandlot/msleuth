@@ -1,64 +1,67 @@
 import path from 'node:path'
-import { and, eq, inArray, or } from 'drizzle-orm'
-import { libretroGameTable } from '../database/schema.ts'
-import { executeQuery, getCompactName } from '../utils.ts'
-import { platformMap } from '../constants/platform.ts'
+import { and, inArray, or } from 'drizzle-orm'
 import { parse } from 'goodcodes-parser'
+import { platformMap } from '../constants/platform.ts'
+import type { DB } from '../database/index.ts'
+import { libretroGameTable } from '../database/schema.ts'
+import type { ROMFile } from '../types/file.ts'
+import { executeQuery, getCompactName } from '../utils.ts'
 
 export class LibretroProvider {
-  private db
+  private db: DB
 
-  constructor({ db }) {
+  constructor({ db }: { db: DB }) {
     this.db = db
   }
 
-  async guessByMd5(files) {
-    const [{ platform }] = files
-    const results = await this.db
-      .select()
-      .from(libretroGameTable)
-      .where(
-        and(
-          inArray(
-            libretroGameTable.md5,
-            files.map(({ md5 }) => md5)
-          ),
-          eq(libretroGameTable.platform, platformMap[platform].libretroName)
-        )
-      )
-    return results
+  getExtendedFiles(files: ROMFile[]) {
+    const extendedFiles = files.map((file) => {
+      const { name } = path.parse(file.name)
+      const compactName = getCompactName(name)
+      const goodcodesBaseCompactName = getCompactName(parse(`0 - ${name}`).rom)
+      return { ...file, compactName, goodcodesBaseCompactName, name, romName: file.name }
+    })
+
+    return extendedFiles
   }
 
-  async guessByName(files) {
-    const [{ platform }] = files
+  async guess(platform: string, files: ROMFile[]) {
+    const extendedFiles = this.getExtendedFiles(files)
 
-    const filters = [
-      { column: libretroGameTable.romName, values: files.map(({ name }) => name) },
-      { column: libretroGameTable.name, values: files.map(({ name }) => path.parse(name).name) },
-      { column: libretroGameTable.compactName, values: files.map(({ name }) => getCompactName(path.parse(name).name)) },
-      { column: libretroGameTable.goodcodesBaseCompactName, values: files.map(({ name }) => getCompactName(parse(`0 - ${path.parse(name).name}`).rom)) },
-    ]
+    const columns =
+      platform === 'arcade'
+        ? (['md5', 'romName'] as const)
+        : (['md5', 'romName', 'name', 'compactName', 'goodcodesBaseCompactName'] as const)
 
-    const q = this.db
+    const filters = columns
+      .map((column) => ({
+        column: libretroGameTable[column],
+        values: extendedFiles.map(({ [column]: value }) => value || '').filter(Boolean),
+      }))
+      .filter(({ values }) => values.length)
+
+    const arcadeLibretroPlatforms = ['MAME', 'MAME 2003-Plus', 'FBNeo - Arcade Games']
+    const libretroPlatforms = platform === 'arcade' ? arcadeLibretroPlatforms : [platformMap[platform].libretroName]
+    const query = this.db
       .select()
       .from(libretroGameTable)
       .where(
         and(
+          inArray(libretroGameTable.platform, libretroPlatforms),
           or(...filters.map(({ column, values }) => inArray(column, values))),
-          eq(libretroGameTable.platform, platformMap[platform].libretroName)
-        )
+        ),
       )
 
-    const results = await executeQuery(this.db, q)
-    return results
-  }
+    const rows = await executeQuery(this.db, query)
 
-  async guess(files) {
-    const results = this.guessByName(files)
-    return results
-  }
-
-  getMultible() {
-    this.db
+    return extendedFiles.map((extendedFile) => {
+      for (const column of columns) {
+        const result = rows.find(({ [column]: value }) => value === extendedFile[column])
+        if (result) {
+          return result
+        }
+      }
+      return null
+    })
   }
 }

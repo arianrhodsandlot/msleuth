@@ -1,7 +1,7 @@
 import path from 'node:path'
 import * as schema from './schema.ts'
 
-async function getSQLiteDB () {
+async function getSQLiteDB() {
   const { drizzle } = await import('drizzle-orm/better-sqlite3')
 
   const dbFileName = 'msleuth.db'
@@ -11,7 +11,7 @@ async function getSQLiteDB () {
   return db
 }
 
-export async function getDB (type = 'sqlite') {
+export async function getDB(type = 'sqlite') {
   const getDBFunction = { sqlite: getSQLiteDB }[type]
   if (!getDBFunction) {
     throw new Error(`Unsupported database type: ${type}`)
@@ -19,3 +19,5 @@ export async function getDB (type = 'sqlite') {
   const db = await getDBFunction()
   return db
 }
+
+export type DB = Awaited<ReturnType<typeof getDB>>
