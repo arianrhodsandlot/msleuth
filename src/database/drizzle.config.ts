@@ -6,6 +6,6 @@ export default defineConfig({
     url: 'src/database/msleuth.db',
   },
   dialect: 'sqlite',
-  out: 'src/databases/migrations',
-  schema: 'src/databases/schema.ts',
+  out: 'src/database/migrations',
+  schema: 'src/database/schema.ts',
 })
