@@ -1,16 +1,9 @@
 import test, { describe } from 'node:test'
 import { sleuth } from '../src/index.ts'
 
-describe.skip('sleuth', () => {
+describe('sleuth', () => {
   test('sleuth with name', async (t) => {
-    const metadata = await sleuth('nes', [
-      {
-        name: 'Contra (USA).zip',
-      },
-      {
-        name: 'Contra (USA) [!].zip',
-      },
-    ])
+    const metadata = await sleuth('nes', [{ name: 'Contra (USA).zip' }, { name: 'Contra (USA) [!].zip' }])
     t.assert.partialDeepStrictEqual(metadata, [
       { launchbox: { databaseId: 1258 }, libretro: { id: 'cecdb9587c85bc0f0bbcac5e2046e433f9b97f92' } },
       { launchbox: { databaseId: 1258 }, libretro: { id: 'cecdb9587c85bc0f0bbcac5e2046e433f9b97f92' } },

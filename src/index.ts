@@ -1,2 +1,2 @@
-export { query } from './apis/query.ts'
-export { sleuth } from './apis/sleuth.ts'
+export { query } from './controllers/query.ts'
+export { sleuth } from './controllers/sleuth.ts'

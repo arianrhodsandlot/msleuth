@@ -1,20 +1,64 @@
+import path from 'node:path'
+import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
-import { query } from '../apis/query.ts'
-import { sleuth } from '../apis/sleuth.ts'
+import { logger } from 'hono/logger'
+import { renderFile } from 'pug'
+import { z } from 'zod'
+import { platforms } from '../constants/platform.ts'
+import { query } from '../controllers/query.ts'
+import { sleuth } from '../controllers/sleuth.ts'
+import { safeParseJson5 } from '../utils.ts'
 
 const app = new Hono()
 
-app.get('/query', (c) => {
+app.use(logger())
+
+app.get(
+  '/',
+  zValidator(
+    'query',
+    z.object({
+      action: z.enum(['sleuth', 'query']).default('query'),
+      inputs: z.string().default(''),
+      platform: z.string().default(''),
+    }),
+  ),
+  async (c) => {
+    const template = path.resolve(import.meta.dirname, '..', 'templates', 'home.pug')
+
+    const { action, inputs, platform } = c.req.valid('query')
+
+    const parsedInputs = safeParseJson5(inputs)
+
+    const locals = { action, c, inputs, platform, platforms, results: [] as any[] }
+
+    if (action && parsedInputs) {
+      switch (action) {
+        case 'query':
+          locals.results = await query(parsedInputs)
+          break
+        case 'sleuth':
+          locals.results = await sleuth(platform, parsedInputs)
+          break
+      }
+    }
+
+    const html = renderFile(template, locals)
+    return c.html(html)
+  },
+)
+
+app.get('/api/v1/query', async (c) => {
   const conditions = JSON.parse(c.req.query('conditions') || '')
-  const result = query(conditions)
-  return c.json(result)
+  const results = await query(conditions)
+  return c.json(results)
 })
 
-app.get('/sleuth', async (c) => {
+app.get('/api/v1/sleuth', async (c) => {
   const platform = c.req.query('platform') || ''
   const files = JSON.parse(c.req.query('files') || '')
-  const result = await sleuth(platform, files)
-  return c.json(result)
+  const results = await sleuth(platform, files)
+  return c.json(results)
 })
 
 export { app }

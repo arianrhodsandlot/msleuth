@@ -1,4 +1,5 @@
 import { sql } from 'drizzle-orm'
+import json5 from 'json5'
 import type { DB } from './database/index.ts'
 
 export function getCompactName(name: string) {
@@ -26,4 +27,13 @@ export function restoreTitleForSorting(title: string) {
   }
   // Return original string if no match
   return title
+}
+
+export function safeParseJson5(input: string) {
+  try {
+    return json5.parse(input)
+  } catch (error) {
+    console.warn(error)
+    return null
+  }
 }

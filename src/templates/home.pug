@@ -1,0 +1,69 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    title msleuth
+    link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css')
+    link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.colors.min.css')
+    style.
+      body {
+        --pico-primary: var(--pico-color-cyan-750);
+
+        --pico-primary-background: var(--pico-primary);
+        --pico-primary-border: var(--pico-primary);
+        --pico-primary-underline: var(--pico-primary);
+
+        --pico-primary-hover: var(--pico-color-cyan-750);
+        --pico-primary-hover-background: var(--pico-primary);
+        --pico-primary-hover-border: var(--pico-primary);
+        --pico-primary-hover-underline: var(--pico-primary);
+
+        --pico-border-color: var(--pico-primary);
+        --pico-form-element-active-border-color: var(--pico-primary);
+      }
+
+  body
+    .container(style={width: '1380px', margin: 'auto', 'max-width': '100%', padding: '20px'})
+      h1(style={'text-align': 'center'})
+        a(href='/') msleuth
+
+      form
+        fieldset(style={display: 'flex', gap: '12px' })
+          label Action
+            select(name='action')
+              each a in ['query', 'sleuth']
+                option(value=a selected=a === action)= a
+          label Platform
+            select(name='platform')
+              each p in platforms
+                option(value=p.name selected=p === platform)= p.name
+          label(style={flex: 1}) Inputs
+            input(type='text', name='inputs' value=inputs)
+        button(type='submit') Submit
+
+      if results && results.length > 0
+        table(border=1)
+          thead
+            tr
+              th Libretro
+              th Launchbox
+          tbody
+            each result in results
+              tr
+                td
+                  if result.libretro
+                    table(border=1)
+                      tbody
+                        each field in ['id', 'name', 'platform', 'romName', 'md5', 'compactName', 'goodcodesBaseCompactName']
+                          tr
+                            td #{field}
+                            td #{result.libretro[field]}
+                td
+                  if result.launchbox
+                    table(border=1)
+                      tbody
+                        each field in ['databaseId', 'name', 'platform', 'publisher', 'developer', 'compactName', 'goodcodesBaseCompactName']
+                          tr
+                            td #{field}
+                            td #{result.launchbox[field]}
