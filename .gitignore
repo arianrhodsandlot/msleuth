@@ -1,2 +1,3 @@
 msleuth.db
-src/scripts/setup/tmp
+node_modules
+tmp

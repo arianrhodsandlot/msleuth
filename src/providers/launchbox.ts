@@ -17,7 +17,7 @@ export class LaunchboxProvider {
   async getExtendedFiles(files: ROMFile[]) {
     const extendedFiles = files.map((file) => {
       const alternateDatabaseIds: number[] = []
-      const baseName = path.parse(file.name).name
+      const baseName = path.parse(file.name || '').name
       const restoredBaseName = restoreTitleForSorting(parse(`0 - ${baseName}`).rom)
       const compactName = file.compactName || getCompactName(restoredBaseName)
       const goodcodes = parse(`0 - ${restoredBaseName}`)

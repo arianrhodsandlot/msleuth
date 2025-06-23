@@ -4,46 +4,27 @@ html(lang='en')
     meta(charset='UTF-8')
     meta(name='viewport' content='width=device-width, initial-scale=1.0')
     title msleuth
-    link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css')
-    link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.colors.min.css')
-    style.
-      body {
-        --pico-primary: var(--pico-color-cyan-750);
-
-        --pico-primary-background: var(--pico-primary);
-        --pico-primary-border: var(--pico-primary);
-        --pico-primary-underline: var(--pico-primary);
-
-        --pico-primary-hover: var(--pico-color-cyan-750);
-        --pico-primary-hover-background: var(--pico-primary);
-        --pico-primary-hover-border: var(--pico-primary);
-        --pico-primary-hover-underline: var(--pico-primary);
-
-        --pico-border-color: var(--pico-primary);
-        --pico-form-element-active-border-color: var(--pico-primary);
-      }
+    link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css')
 
   body
     .container(style={width: '1380px', margin: 'auto', 'max-width': '100%', padding: '20px'})
-      h1(style={'text-align': 'center'})
-        a(href='/') msleuth
+      h1.is-size-1.has-text-centered.has-text-weight-semibold: a(href='/') msleuth
 
-      form
-        fieldset(style={display: 'flex', gap: '12px' })
-          label Action
-            select(name='action')
-              each a in ['query', 'sleuth']
-                option(value=a selected=a === action)= a
-          label Platform
-            select(name='platform')
-              each p in platforms
-                option(value=p.name selected=p === platform)= p.name
-          label(style={flex: 1}) Inputs
-            input(type='text', name='inputs' value=inputs)
-        button(type='submit') Submit
+      form.is-flex.is-justify-content-center.is-align-items-center
+        label.label.is-small.is-flex.is-justify-content-center.is-align-items-center.is-3.mx-2 Action
+          .select.mx-1: select(name='action')
+            each a in ['query', 'sleuth']
+              option(value=a selected=a === action)= a
+        label.label.is-small.is-flex.is-justify-content-center.is-align-items-center.is-3.mx-2 Platform
+          .select.mx-1: select(name='platform')
+            each p in platforms
+              option(value=p.name selected=p.name === platform)= p.name
+        label.label.is-small.is-flex.is-justify-content-center.is-align-items-center.is-3.mx-2 Inputs
+          input.mx-1.is-small.input(type='text', name='inputs' value=inputs)
+        button.mb-2.button.is-primary.is-small(type='submit') Submit
 
       if results && results.length > 0
-        table(border=1)
+        table.table.is-bordered.is-fullwidth
           thead
             tr
               th Libretro
@@ -53,17 +34,21 @@ html(lang='en')
               tr
                 td
                   if result.libretro
-                    table(border=1)
-                      tbody
-                        each field in ['id', 'name', 'platform', 'romName', 'md5', 'compactName', 'goodcodesBaseCompactName']
-                          tr
-                            td #{field}
-                            td #{result.libretro[field]}
+                    table.is-fullwidth: tbody
+                      each field in ['id', 'name', 'platform', 'romName', 'md5', 'compactName', 'goodcodesBaseCompactName']
+                        tr
+                          td #{field}
+                          td #{result.libretro[field]}
+                      tr
+                        td images
+                        td
+                          - const images = ['Boxart', 'Title', 'Snap'].map((type) => `https://cdn.jsdelivr.net/gh/libretro-thumbnails/${result.libretro.platform.replaceAll(' ', '_')}/Named_${type}s/${result.libretro.name.replaceAll(/[&*/:`<>?\\]|\|"/g, '_')}.png`)
+                          each image in images
+                            a(href=image target='_blank' title=image): img(src=image, style='max-width: 100px; max-height: 100px; margin-right: 10px;')
                 td
                   if result.launchbox
-                    table(border=1)
-                      tbody
-                        each field in ['databaseId', 'name', 'platform', 'publisher', 'developer', 'compactName', 'goodcodesBaseCompactName']
-                          tr
-                            td #{field}
-                            td #{result.launchbox[field]}
+                    table.is-fullwidth: tbody
+                      each field in ['databaseId', 'name', 'platform', 'publisher', 'developer', 'compactName', 'goodcodesBaseCompactName', 'releaseYear', 'releaseDate', 'genres', 'videoUrl']
+                        tr
+                          td #{field}
+                          td #{result.launchbox[field]}

@@ -17,6 +17,7 @@ async function prepareZip(inputSubDirectory: string, url: string) {
 $.verbose = true
 
 // await $`rm -rf src/scripts/setup/tmp`
+await $`rm -rf src/database/msleuth.db`
 
 // Prepare the input metadata files
 await Promise.all([

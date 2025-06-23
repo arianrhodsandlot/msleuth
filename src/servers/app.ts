@@ -18,7 +18,7 @@ app.get(
   zValidator(
     'query',
     z.object({
-      action: z.enum(['sleuth', 'query']).default('query'),
+      action: z.enum(['sleuth', 'query']).optional(),
       inputs: z.string().default(''),
       platform: z.string().default(''),
     }),
@@ -28,7 +28,25 @@ app.get(
 
     const { action, inputs, platform } = c.req.valid('query')
 
-    const parsedInputs = safeParseJson5(inputs)
+    const parsedInputs = inferInputs(inputs)
+    function inferInputs(rawInputs: string) {
+      const inputs = rawInputs.trim()
+      if (!inputs) {
+        return
+      }
+      if (!inputs.startsWith('[')) {
+        if (inputs.startsWith('{')) {
+          return inferInputs(`[${inputs}]`)
+        }
+        if (action === 'sleuth') {
+          return inferInputs(inputs.includes('.') ? `{name:'${inputs}'}` : `{md5:'${inputs}'}`)
+        }
+        if (action === 'query') {
+          return inferInputs(/\d+/.test(inputs) ? `{launchboxId:${inputs}}` : `{libretroId:'${inputs}'}`)
+        }
+      }
+      return safeParseJson5(inputs)
+    }
 
     const locals = { action, c, inputs, platform, platforms, results: [] as any[] }
 

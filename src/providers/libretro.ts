@@ -16,7 +16,7 @@ export class LibretroProvider {
 
   getExtendedFiles(files: ROMFile[]) {
     const extendedFiles = files.map((file) => {
-      const { name } = path.parse(file.name)
+      const { name } = path.parse(file.name || '')
       const compactName = getCompactName(name)
       const goodcodesBaseCompactName = getCompactName(parse(`0 - ${name}`).rom)
       return { ...file, compactName, goodcodesBaseCompactName, name, romName: file.name }
