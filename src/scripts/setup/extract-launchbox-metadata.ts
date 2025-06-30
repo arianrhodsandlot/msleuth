@@ -37,7 +37,6 @@ const nonSupportedPlatforms = new Set([
   'Ouya',
   'Pinball',
   'Sega Dreamcast',
-  'Sega Saturn',
   'Sinclair ZX Spectrum',
   'Sony Playstation 2',
   'Sony Playstation 3',

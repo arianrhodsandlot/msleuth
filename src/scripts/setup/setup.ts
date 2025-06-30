@@ -1,23 +1,24 @@
-import { $, fs, path } from 'zx'
+import path from 'node:path'
+import { $ } from 'execa'
+import fs from 'fs-extra'
+
+const $$ = $({ verbose: 'full' })
 
 async function prepareZip(inputSubDirectory: string, url: string) {
-  const inputDirectory = path.join('src/scripts/setup/tmp/inputs', inputSubDirectory)
-  await $`mkdir -p ${inputDirectory}`
+  const inputDirectory = path.join('src', 'scripts', 'setup', 'tmp', 'inputs', inputSubDirectory)
+  await fs.mkdirp(inputDirectory)
   const { base, name } = path.parse(new URL(url).pathname)
   const zipDirectory = path.join(inputDirectory, name)
   const zipPath = path.join(inputDirectory, base)
   if (!(await fs.exists(zipDirectory))) {
     if (!(await fs.exists(zipPath))) {
-      await $`curl ${url} -o ${zipPath}`
+      await $$`curl ${url} -o ${zipPath}`
     }
-    $`unzip ${zipPath} -d ${zipDirectory}`
+    await $$`unzip ${zipPath} -d ${zipDirectory}`
   }
 }
 
-$.verbose = true
-
-// await $`rm -rf src/scripts/setup/tmp`
-await $`rm -rf src/database/msleuth.db`
+await fs.remove(path.join('src', 'database', 'msleuth.db'))
 
 // Prepare the input metadata files
 await Promise.all([
@@ -26,12 +27,13 @@ await Promise.all([
 ])
 
 // Initialize a temporary database
-await $`mkdir -p src/scripts/setup/tmp/artifacts`
-await $`drizzle-kit --config=src/database/drizzle.config.ts generate --name=init`
-await $`drizzle-kit --config=src/database/drizzle.config.ts migrate`
+await fs.mkdirp(path.join('src', 'scripts', 'setup', 'tmp', 'artifacts'))
+const drizzleConfigPath = path.join('src', 'database', 'drizzle.config.ts')
+await $$`drizzle-kit --config=${drizzleConfigPath} generate --name=init`
+await $$`drizzle-kit --config=${drizzleConfigPath} migrate`
 
 // Prepare data for the temporary database
 await Promise.all([
-  $`node src/scripts/setup/extract-libretro-db.ts`,
-  $`node src/scripts/setup/extract-launchbox-metadata.ts`,
+  $$`node ${path.join('src', 'scripts', 'setup', 'extract-libretro-db.ts')}`,
+  $$`node ${path.join('src', 'scripts', 'setup', 'extract-launchbox-metadata.ts')}`,
 ])

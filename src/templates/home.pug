@@ -8,7 +8,7 @@ html(lang='en')
 
   body
     .container(style={width: '1380px', margin: 'auto', 'max-width': '100%', padding: '20px'})
-      h1.is-size-1.has-text-centered.has-text-weight-semibold: a(href='/') msleuth
+      h1.is-size-1.has-text-centered.has-text-weight-semibold: a.button.is-ghost.is-large.is-primary(href='/') msleuth
 
       form.is-flex.is-justify-content-center.is-align-items-center
         label.label.is-small.is-flex.is-justify-content-center.is-align-items-center.is-3.mx-2 Action
@@ -21,7 +21,7 @@ html(lang='en')
               option(value=p.name selected=p.name === platform)= p.name
         label.label.is-small.is-flex.is-justify-content-center.is-align-items-center.is-3.mx-2 Inputs
           input.mx-1.is-small.input(type='text', name='inputs' value=inputs)
-        button.mb-2.button.is-primary.is-small(type='submit') Submit
+        button.mb-2.button.is-link.is-small(type='submit') Submit
 
       if results && results.length > 0
         table.table.is-bordered.is-fullwidth
@@ -42,7 +42,7 @@ html(lang='en')
                       tr
                         td images
                         td
-                          - const images = ['Boxart', 'Title', 'Snap'].map((type) => `https://cdn.jsdelivr.net/gh/libretro-thumbnails/${result.libretro.platform.replaceAll(' ', '_')}/Named_${type}s/${result.libretro.name.replaceAll(/[&*/:`<>?\\]|\|"/g, '_')}.png`)
+                          - const images = ['Boxart', 'Title', 'Snap'].map((type) => `https://cdn.jsdelivr.net/gh/libretro-thumbnails/${result.libretro.platform.replaceAll(' ', '_').replaceAll('MAME_2003-Plus', 'MAME')}/Named_${type}s/${result.libretro.name.replaceAll(/[&*/:`<>?\\]|\|"/g, '_')}.png`)
                           each image in images
                             a(href=image target='_blank' title=image): img(src=image, style='max-width: 100px; max-height: 100px; margin-right: 10px;')
                 td

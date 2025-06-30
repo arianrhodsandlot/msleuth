@@ -2,9 +2,9 @@ import crypto from 'node:crypto'
 import path from 'node:path'
 import { type BetterSQLite3Database, drizzle } from 'drizzle-orm/better-sqlite3'
 import { camelCase, chunk, mapKeys } from 'es-toolkit'
+import fs from 'fs-extra'
 import { parse } from 'goodcodes-parser'
 import { Libretrodb } from 'libretrodb'
-import { fs } from 'zx'
 import { libretroGameTable } from '../../database/schema.ts'
 
 const nonSupportedPlatforms = new Set([
@@ -19,7 +19,6 @@ const nonSupportedPlatforms = new Set([
   'Sega - Dreamcast',
   'Sega - Naomi',
   'Sega - Naomi 2',
-  'Sega - Saturn',
   'Sinclair - ZX Spectrum',
   'Sony - PlayStation 2',
   'Sony - PlayStation 3',
@@ -60,9 +59,9 @@ async function extractLibretroDb(rdbPath: string, db: BetterSQLite3Database) {
 async function extractLibretroDbs() {
   const db = drizzle({
     casing: 'snake_case',
-    connection: path.resolve(import.meta.dirname, '../..', 'database/msleuth.db'),
+    connection: path.resolve(import.meta.dirname, '..', '..', 'database', 'msleuth.db'),
   })
-  const libretroDbDirectory = path.resolve(import.meta.dirname, 'tmp/inputs/libretro/database-rdb/')
+  const libretroDbDirectory = path.resolve(import.meta.dirname, 'tmp', 'inputs', 'libretro', 'database-rdb')
   const rdbs = await fs.readdir(libretroDbDirectory)
   const rdbPaths = rdbs.map((rdb) => path.resolve(libretroDbDirectory, rdb))
   for (const rdbPath of rdbPaths) {
