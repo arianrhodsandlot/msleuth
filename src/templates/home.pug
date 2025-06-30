@@ -13,7 +13,7 @@ html(lang='en')
       form.is-flex.is-justify-content-center.is-align-items-center
         label.label.is-small.is-flex.is-justify-content-center.is-align-items-center.is-3.mx-2 Action
           .select.mx-1: select(name='action')
-            each a in ['query', 'sleuth']
+            each a in ['sleuth', 'query']
               option(value=a selected=a === action)= a
         label.label.is-small.is-flex.is-justify-content-center.is-align-items-center.is-3.mx-2 Platform
           .select.mx-1: select(name='platform')

@@ -1,5 +1,5 @@
 import path from 'node:path'
-import { $ } from 'execa'
+import { $, execaNode } from 'execa'
 import fs from 'fs-extra'
 
 const $$ = $({ verbose: 'full' })
@@ -33,7 +33,8 @@ await $$`drizzle-kit --config=${drizzleConfigPath} generate --name=init`
 await $$`drizzle-kit --config=${drizzleConfigPath} migrate`
 
 // Prepare data for the temporary database
+const execaNodeVerbose = execaNode({ verbose: 'full' })
 await Promise.all([
-  $$`node ${path.join('src', 'scripts', 'setup', 'extract-libretro-db.ts')}`,
-  $$`node ${path.join('src', 'scripts', 'setup', 'extract-launchbox-metadata.ts')}`,
+  execaNodeVerbose`${path.join('src', 'scripts', 'setup', 'extract-libretro-db.ts')}`,
+  execaNodeVerbose`${path.join('src', 'scripts', 'setup', 'extract-launchbox-metadata.ts')}`,
 ])

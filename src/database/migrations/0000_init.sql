@@ -36,9 +36,9 @@ CREATE TABLE `launchbox_games` (
 	`wikipedia_url` text
 );
 --> statement-breakpoint
-CREATE INDEX `lbg_compact_name_platform_idx` ON `launchbox_games` (`compact_name`,`platform`);--> statement-breakpoint
-CREATE INDEX `lbg_goodcodes_base_compact_name_platform_idx` ON `launchbox_games` (`goodcodes_base_compact_name`,`platform`);--> statement-breakpoint
-CREATE INDEX `lbg_platform_idx` ON `launchbox_games` (`platform`);--> statement-breakpoint
+CREATE INDEX `idx_launchbox_games_compact_name_platform` ON `launchbox_games` (`compact_name`,`platform`);--> statement-breakpoint
+CREATE INDEX `idx_launchbox_games_goodcodes_base_compact_name_platform` ON `launchbox_games` (`goodcodes_base_compact_name`,`platform`);--> statement-breakpoint
+CREATE INDEX `idx_launchbox_games_platform` ON `launchbox_games` (`platform`);--> statement-breakpoint
 CREATE TABLE `launchbox_platform_alternate_names` (
 	`alternate` text NOT NULL,
 	`id` text PRIMARY KEY NOT NULL,

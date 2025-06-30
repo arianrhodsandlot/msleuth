@@ -1,6 +1,7 @@
 import path from 'node:path'
 import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
+import { contextStorage } from 'hono/context-storage'
 import { logger } from 'hono/logger'
 import { renderFile } from 'pug'
 import { z } from 'zod'
@@ -11,7 +12,7 @@ import { safeParseJson5 } from '../utils.ts'
 
 const app = new Hono()
 
-app.use(logger())
+app.use(logger(), contextStorage())
 
 app.get(
   '/',
@@ -24,6 +25,10 @@ app.get(
     }),
   ),
   async (c) => {
+    if (!import.meta.dirname) {
+      return c.text('Home page for this environment is not supported yet. Use APIs directly.', 404)
+    }
+
     const template = path.resolve(import.meta.dirname, '..', 'templates', 'home.pug')
 
     const { action, inputs, platform } = c.req.valid('query')

@@ -1,3 +1,6 @@
 msleuth.db
+msleuth.sql
+.wrangler
 node_modules
 tmp
+wrangler.json

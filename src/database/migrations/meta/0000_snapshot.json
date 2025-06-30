@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "27c05ed2-ec49-45ff-833a-bad4dcabca8c",
+  "id": "93520cf2-08b5-4b6a-ad3b-10f841e04241",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "launchbox_game_alternate_names": {
@@ -246,24 +246,24 @@
         }
       },
       "indexes": {
-        "lbg_compact_name_platform_idx": {
-          "name": "lbg_compact_name_platform_idx",
+        "idx_launchbox_games_compact_name_platform": {
+          "name": "idx_launchbox_games_compact_name_platform",
           "columns": [
             "compact_name",
             "platform"
           ],
           "isUnique": false
         },
-        "lbg_goodcodes_base_compact_name_platform_idx": {
-          "name": "lbg_goodcodes_base_compact_name_platform_idx",
+        "idx_launchbox_games_goodcodes_base_compact_name_platform": {
+          "name": "idx_launchbox_games_goodcodes_base_compact_name_platform",
           "columns": [
             "goodcodes_base_compact_name",
             "platform"
           ],
           "isUnique": false
         },
-        "lbg_platform_idx": {
-          "name": "lbg_platform_idx",
+        "idx_launchbox_games_platform": {
+          "name": "idx_launchbox_games_platform",
           "columns": [
             "platform"
           ],

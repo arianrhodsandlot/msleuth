@@ -35,9 +35,12 @@ export const launchboxGameTable = sqliteTable(
     wikipediaUrl: text(),
   },
   (table) => [
-    index('lbg_compact_name_platform_idx').on(table.compactName, table.platform),
-    index('lbg_goodcodes_base_compact_name_platform_idx').on(table.goodcodesBaseCompactName, table.platform),
-    index('lbg_platform_idx').on(table.platform),
+    index('idx_launchbox_games_compact_name_platform').on(table.compactName, table.platform),
+    index('idx_launchbox_games_goodcodes_base_compact_name_platform').on(
+      table.goodcodesBaseCompactName,
+      table.platform,
+    ),
+    index('idx_launchbox_games_platform').on(table.platform),
   ],
 )
 
