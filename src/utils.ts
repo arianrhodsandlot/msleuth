@@ -6,9 +6,9 @@ export function getCompactName(name: string) {
   return name.replaceAll(/[^\p{Letter}\p{Mark}\p{Number}]/gu, '').toLowerCase()
 }
 
-const isDebugging = process.env.MSLEUTH_DEBUG === 'true'
+const isProduction = process.env.NODE_ENV === 'production'
 export async function executeQuery<T>(db: DB, query: T) {
-  if (isDebugging) {
+  if (!isProduction) {
     // @ts-expect-error
     const plans = db.all(sql`EXPLAIN QUERY PLAN ${query.getSQL()}`)
     // @ts-expect-error

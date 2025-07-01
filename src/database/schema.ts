@@ -35,12 +35,10 @@ export const launchboxGameTable = sqliteTable(
     wikipediaUrl: text(),
   },
   (table) => [
-    index('idx_launchbox_games_compact_name_platform').on(table.compactName, table.platform),
-    index('idx_launchbox_games_goodcodes_base_compact_name_platform').on(
-      table.goodcodesBaseCompactName,
-      table.platform,
-    ),
     index('idx_launchbox_games_platform').on(table.platform),
+    index('idx_launchbox_games_platform_compact_name').on(table.platform, table.compactName),
+    index('idx_launchbox_games_platform_goodcodes_cn').on(table.platform, table.goodcodesBaseCompactName),
+    index('idx_launchbox_games_platform_database_id').on(table.platform, table.databaseId),
   ],
 )
 
@@ -73,7 +71,10 @@ export const launchboxPlatformAlternateNameTable = sqliteTable(
     id: text('id').primaryKey().notNull().$defaultFn(nanoid),
     name: text(),
   },
-  (table) => [index('idx_launchbox_platform_alternate_names').on(table.alternate, table.name)],
+  (table) => [
+    index('idx_launchbox_platform_alternate').on(table.alternate),
+    index('idx_launchbox_platform_name').on(table.name),
+  ],
 )
 
 export const launchboxGameAlternateNameTable = sqliteTable(
@@ -85,7 +86,7 @@ export const launchboxGameAlternateNameTable = sqliteTable(
     id: text().primaryKey().notNull().$defaultFn(nanoid),
     region: text(),
   },
-  (table) => [index('idx_launchbox_game_alternate_names').on(table.alternateName, table.compactName, table.databaseId)],
+  (table) => [index('idx_launchbox_game_alternate_name_compact_name').on(table.compactName)],
 )
 
 export const libretroGameTable = sqliteTable(
@@ -113,13 +114,11 @@ export const libretroGameTable = sqliteTable(
     users: integer(),
   },
   (table) => [
-    index('idx_libretro_game').on(
-      table.name,
-      table.goodcodesBaseCompactName,
-      table.md5,
-      table.compactName,
-      table.platform,
-      table.romName,
-    ),
+    index('idx_libretro_games_platform').on(table.platform),
+    index('idx_libretro_games_platform_md5').on(table.platform, table.md5),
+    index('idx_libretro_games_platform_rom_name').on(table.platform, table.romName),
+    index('idx_libretro_games_platform_name').on(table.platform, table.name),
+    index('idx_libretro_games_platform_compact_name').on(table.platform, table.compactName),
+    index('idx_libretro_games_platform_goodcodes_base_compact_name').on(table.platform, table.goodcodesBaseCompactName),
   ],
 )

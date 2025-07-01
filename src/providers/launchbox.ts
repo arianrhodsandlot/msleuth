@@ -26,7 +26,7 @@ export class LaunchboxProvider {
       return { ...file, alternateDatabaseIds, baseName, compactName, goodcodesBaseCompactName, restoredBaseName }
     })
 
-    const rows = await this.db
+    const query = this.db
       .select()
       .from(launchboxGameAlternateNameTable)
       .where(
@@ -35,6 +35,8 @@ export class LaunchboxProvider {
           extendedFiles.map(({ compactName }) => compactName),
         ),
       )
+
+    const rows = await executeQuery(this.db, query)
 
     for (const row of rows) {
       for (const extendedFile of extendedFiles) {
