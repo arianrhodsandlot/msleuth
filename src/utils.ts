@@ -10,7 +10,7 @@ const isProduction = process.env.NODE_ENV === 'production'
 export async function executeQuery<T>(db: DB, query: T) {
   if (!isProduction) {
     // @ts-expect-error
-    const plans = db.all(sql`EXPLAIN QUERY PLAN ${query.getSQL()}`)
+    const plans = await db.all(sql`EXPLAIN QUERY PLAN ${query.getSQL()}`)
     // @ts-expect-error
     console.info(query.toSQL(), ...plans.map((plan: any) => plan.detail))
   }

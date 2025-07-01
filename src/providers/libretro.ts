@@ -14,7 +14,21 @@ export class LibretroProvider {
     this.db = db
   }
 
-  getExtendedFiles(files: ROMFile[]) {
+  async guess(platform: string, files: ROMFile[]) {
+    const md5Results = await this.guessByColumns(platform, files, ['md5'])
+    if (md5Results.every(Boolean)) {
+      return md5Results
+    }
+
+    const arcadeNameColumns = ['romName'] as const
+    const generalNameColumns = ['romName', 'name', 'compactName', 'goodcodesBaseCompactName'] as const
+    const nameColumns = platform === 'arcade' ? arcadeNameColumns : generalNameColumns
+    const nameResults = await this.guessByColumns(platform, files, nameColumns)
+
+    return files.map((file, index) => md5Results[index] || nameResults[index])
+  }
+
+  private getExtendedFiles(files: ROMFile[]) {
     const extendedFiles = files.map((file) => {
       const { name } = path.parse(file.name || '')
       const compactName = getCompactName(name)
@@ -25,13 +39,12 @@ export class LibretroProvider {
     return extendedFiles
   }
 
-  async guess(platform: string, files: ROMFile[]) {
+  private async guessByColumns(
+    platform: string,
+    files: ROMFile[],
+    columns: readonly ('compactName' | 'goodcodesBaseCompactName' | 'md5' | 'name' | 'romName')[],
+  ) {
     const extendedFiles = this.getExtendedFiles(files)
-
-    const columns =
-      platform === 'arcade'
-        ? (['md5', 'romName'] as const)
-        : (['md5', 'romName', 'name', 'compactName', 'goodcodesBaseCompactName'] as const)
 
     const filters = columns
       .map((column) => ({

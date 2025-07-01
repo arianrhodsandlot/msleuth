@@ -14,41 +14,6 @@ export class LaunchboxProvider {
     this.db = db
   }
 
-  async getExtendedFiles(files: ROMFile[]) {
-    const extendedFiles = files.map((file) => {
-      const alternateDatabaseIds: number[] = []
-      const baseName = path.parse(file.name || '').name
-      const restoredBaseName = restoreTitleForSorting(parse(`0 - ${baseName}`).rom)
-      const compactName = file.compactName || getCompactName(restoredBaseName)
-      const goodcodes = parse(`0 - ${restoredBaseName}`)
-      const goodcodesBaseName = goodcodes.rom
-      const goodcodesBaseCompactName = file.goodcodesBaseCompactName || getCompactName(goodcodesBaseName)
-      return { ...file, alternateDatabaseIds, baseName, compactName, goodcodesBaseCompactName, restoredBaseName }
-    })
-
-    const query = this.db
-      .select()
-      .from(launchboxGameAlternateNameTable)
-      .where(
-        inArray(
-          launchboxGameAlternateNameTable.compactName,
-          extendedFiles.map(({ compactName }) => compactName),
-        ),
-      )
-
-    const rows = await executeQuery(this.db, query)
-
-    for (const row of rows) {
-      for (const extendedFile of extendedFiles) {
-        if (row.compactName === extendedFile.compactName && row.databaseId) {
-          extendedFile.alternateDatabaseIds.push(row.databaseId)
-        }
-      }
-    }
-
-    return extendedFiles
-  }
-
   async guess(platform: string, files: ROMFile[]) {
     const platformLaunchboxName = platformMap[platform].launchboxName
     const extendedFiles = await this.getExtendedFiles(files)
@@ -94,5 +59,44 @@ export class LaunchboxProvider {
       }
       return null
     })
+  }
+
+  private async getExtendedFiles(files: ROMFile[]) {
+    if (files.length === 0) {
+      return []
+    }
+
+    const extendedFiles = files.map((file) => {
+      const alternateDatabaseIds: number[] = []
+      const baseName = path.parse(file.name || '').name
+      const restoredBaseName = restoreTitleForSorting(parse(`0 - ${baseName}`).rom)
+      const compactName = file.compactName || getCompactName(restoredBaseName)
+      const goodcodes = parse(`0 - ${restoredBaseName}`)
+      const goodcodesBaseName = goodcodes.rom
+      const goodcodesBaseCompactName = file.goodcodesBaseCompactName || getCompactName(goodcodesBaseName)
+      return { ...file, alternateDatabaseIds, baseName, compactName, goodcodesBaseCompactName, restoredBaseName }
+    })
+
+    const query = this.db
+      .select()
+      .from(launchboxGameAlternateNameTable)
+      .where(
+        inArray(
+          launchboxGameAlternateNameTable.compactName,
+          extendedFiles.map(({ compactName }) => compactName),
+        ),
+      )
+
+    const rows = await executeQuery(this.db, query)
+
+    for (const row of rows) {
+      for (const extendedFile of extendedFiles) {
+        if (row.compactName === extendedFile.compactName && row.databaseId) {
+          extendedFile.alternateDatabaseIds.push(row.databaseId)
+        }
+      }
+    }
+
+    return extendedFiles
   }
 }
