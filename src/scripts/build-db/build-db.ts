@@ -18,6 +18,7 @@ async function prepareZip(inputSubDirectory: string, url: string) {
     await $$`curl ${url} -o ${zipPath}`
   }
   try {
+    await fs.remove(zipDirectory)
     await $$`unzip ${zipPath} -d ${zipDirectory}`
   } catch {
     await fs.remove(zipPath)

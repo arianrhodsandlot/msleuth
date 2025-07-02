@@ -1,6 +1,7 @@
 import crypto from 'node:crypto'
 import path from 'node:path'
-import { type BetterSQLite3Database, drizzle } from 'drizzle-orm/better-sqlite3'
+import type { LibSQLDatabase } from 'drizzle-orm/libsql'
+import { drizzle } from 'drizzle-orm/libsql/web'
 import { camelCase, chunk, mapKeys } from 'es-toolkit'
 import fs from 'fs-extra'
 import { parse } from 'goodcodes-parser'
@@ -33,7 +34,7 @@ function getCompactName(name: string) {
   return name.replaceAll(/[^\p{Letter}\p{Mark}\p{Number}]/gu, '').toLowerCase()
 }
 
-async function extractLibretroDb(rdbPath: string, db: BetterSQLite3Database) {
+async function extractLibretroDb(rdbPath: string, db: LibSQLDatabase) {
   const platform = path.parse(rdbPath).name
   const libretrodb = await Libretrodb.from(rdbPath, { indexHashes: false })
   const entries = libretrodb.getEntries()

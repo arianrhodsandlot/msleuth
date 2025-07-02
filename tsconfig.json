@@ -1,7 +1,3 @@
 {
-  "extends": ["@tsconfig/node24/tsconfig.json", "@tsconfig/node-ts/tsconfig.json"],
-    "compilerOptions": {
-     "jsx": "react-jsx",
-     "jsxImportSource": "hono/jsx"
-   }
+  "extends": ["@tsconfig/node24/tsconfig.json", "@tsconfig/node-ts/tsconfig.json"]
 }

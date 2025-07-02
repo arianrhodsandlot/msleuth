@@ -13,22 +13,33 @@ async function getD1() {
   return db
 }
 
-async function getSQLite() {
-  const { drizzle } = await import('drizzle-orm/better-sqlite3')
+async function getLibSQL() {
+  const { drizzle } = await import('drizzle-orm/libsql/web')
 
   const dbFileName = 'msleuth.sqlite'
-  const dbFilePath = path.join(import.meta.dirname, dbFileName)
+  const dbFilePath = path.resolve('src', 'database', dbFileName)
+  const db = drizzle(`file://${dbFilePath}`, { casing: 'snake_case', schema })
+
+  return db
+}
+
+async function getBunSQLite() {
+  const { drizzle } = await import('drizzle-orm/bun-sqlite')
+
+  const dbFileName = 'msleuth.sqlite'
+  const dbFilePath = path.resolve('src', 'database', dbFileName)
   const db = drizzle(dbFilePath, { casing: 'snake_case', schema })
 
   return db
 }
 
-const defaultDBType = getRuntimeKey() === 'workerd' ? 'd1' : 'sqlite'
-export async function getDB(type = defaultDBType) {
-  const getDBFunction = { d1: getD1, sqlite: getSQLite }[type]
-  if (!getDBFunction) {
-    throw new Error(`Unsupported database type: ${type}`)
+export async function getDB() {
+  const runtime = getRuntimeKey()
+  const dbFunctions = { bun: getBunSQLite, node: getLibSQL, workd: getD1 }
+  if (!(runtime in dbFunctions)) {
+    throw new Error(`Unsupported runtime: ${runtime}`)
   }
+  const getDBFunction = dbFunctions[runtime as keyof typeof dbFunctions]
   const db = await getDBFunction()
   return db
 }

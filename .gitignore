@@ -1,4 +1,5 @@
 .wrangler
+dist
 migrations
 msleuth.sql
 msleuth.sqlite
