@@ -2,7 +2,7 @@ import path from 'node:path'
 import { execa } from 'execa'
 import fs from 'fs-extra'
 
-const dbPath = path.join('src', 'database', 'msleuth.db')
+const dbPath = path.join('src', 'database', 'msleuth.sqlite')
 const dumpedPath = path.join('src', 'database', 'msleuth.sql')
 const subprocess = execa('sqlite3', [dbPath, '.dump'], { buffer: false })
 const writeStream = fs.createWriteStream(dumpedPath)

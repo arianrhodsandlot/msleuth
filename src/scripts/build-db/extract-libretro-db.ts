@@ -59,7 +59,7 @@ async function extractLibretroDb(rdbPath: string, db: BetterSQLite3Database) {
 async function extractLibretroDbs() {
   const db = drizzle({
     casing: 'snake_case',
-    connection: path.resolve(import.meta.dirname, '..', '..', 'database', 'msleuth.db'),
+    connection: path.resolve(import.meta.dirname, '..', '..', 'database', 'msleuth.sqlite'),
   })
   const libretroDbDirectory = path.resolve(import.meta.dirname, 'tmp', 'inputs', 'libretro', 'database-rdb')
   const rdbs = await fs.readdir(libretroDbDirectory)

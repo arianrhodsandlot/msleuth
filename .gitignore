@@ -1,7 +1,7 @@
 .wrangler
 migrations
-msleuth.db
 msleuth.sql
+msleuth.sqlite
 node_modules
 tmp
 wrangler.json

@@ -258,7 +258,7 @@ async function extractLaunchboxMetadata() {
 
   const db = drizzle({
     casing: 'snake_case',
-    connection: path.resolve(import.meta.dirname, '../..', 'database/msleuth.db'),
+    connection: path.resolve(import.meta.dirname, '../..', 'database/msleuth.sqlite'),
   })
 
   console.info('writing metadata.Platform...')

@@ -16,7 +16,7 @@ async function getD1() {
 async function getSQLite() {
   const { drizzle } = await import('drizzle-orm/better-sqlite3')
 
-  const dbFileName = 'msleuth.db'
+  const dbFileName = 'msleuth.sqlite'
   const dbFilePath = path.join(import.meta.dirname, dbFileName)
   const db = drizzle(dbFilePath, { casing: 'snake_case', schema })
 

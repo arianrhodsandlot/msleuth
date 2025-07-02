@@ -14,6 +14,9 @@ const app = new Hono()
 
 app.use(logger(), contextStorage())
 
+// test urls:
+// http://localhost:3000/?action=query&platform=arcade&inputs=%5B%7B%22launchboxId%22%3A140%2C%22libretroId%22%3A%2223a02b3f92193510329426621b8a23fd94ad886e%22%7D%5D
+// http://localhost:3000/?action=sleuth&platform=arcade&inputs=mslug.zip
 app.get(
   '/',
   zValidator(

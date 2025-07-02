@@ -1,13 +1,14 @@
 {
   "private": true,
-  "keywords": [],
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "node --watch src/servers/node.ts",
+    "build:d1-sql": "node src/scripts/build-d1-sql.ts",
+    "build:db": "node src/scripts/build-db/build-db.ts",
+    "build:workers": "node src/scripts/build-workers.ts",
+    "dev:cf": "wrangler dev",
+    "dev:node": "node --watch src/servers/node.ts",
     "dev:test": "node --run=test -- --watch",
-    "dump-for-d1": "node src/scripts/dump-for-d1.ts",
-    "setup": "node src/scripts/setup/setup.ts",
     "test": "node --test"
   },
   "simple-git-hooks": {
@@ -35,11 +36,11 @@
     "@tsconfig/node-ts": "23.6.1",
     "@tsconfig/node24": "24.0.1",
     "@types/fs-extra": "11.0.4",
-    "@types/node": "24.0.8",
+    "@types/node": "24.0.10",
     "@types/pug": "2.0.10",
     "drizzle-kit": "0.31.4",
     "es-toolkit": "1.39.5",
-    "eslint": "9.30.0",
+    "eslint": "9.30.1",
     "execa": "9.6.0",
     "fs-extra": "11.3.0",
     "jiti": "2.4.2",
