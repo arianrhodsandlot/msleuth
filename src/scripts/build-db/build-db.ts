@@ -4,7 +4,7 @@ import fs from 'fs-extra'
 
 const $$ = $({ verbose: 'full' })
 
-const tmp = path.join(import.meta.dirname, 'tmp')
+const tmp = path.join(process.cwd(), 'tmp')
 
 async function prepareZip(inputSubDirectory: string, url: string) {
   const inputDirectory = path.join(tmp, 'inputs', inputSubDirectory)
@@ -20,7 +20,8 @@ async function prepareZip(inputSubDirectory: string, url: string) {
   try {
     await fs.remove(zipDirectory)
     await $$`unzip ${zipPath} -d ${zipDirectory}`
-  } catch {
+  } catch (error) {
+    console.error(error)
     await fs.remove(zipPath)
     await prepareZip(inputSubDirectory, url)
   }
@@ -31,8 +32,7 @@ await Promise.all([
   prepareZip('libretro', 'https://buildbot.libretro.com/assets/frontend/database-rdb.zip'),
   prepareZip('launchbox', 'https://gamesdb.launchbox-app.com/metadata.zip'),
 ])
-
-await fs.remove(path.join('src', 'database', 'msleuth.sqlite'))
+await fs.remove(path.join('msleuth.sqlite'))
 await fs.mkdirp(path.join(tmp, 'artifacts'))
 const drizzleConfigPath = path.join('src', 'database', 'drizzle.config.ts')
 await $$`drizzle-kit --config=${drizzleConfigPath} generate --name=init`

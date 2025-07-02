@@ -13,12 +13,12 @@ async function getD1() {
   return db
 }
 
-async function getLibSQL() {
-  const { drizzle } = await import('drizzle-orm/libsql/web')
+async function getBetterSQLite3() {
+  const { drizzle } = await import('drizzle-orm/better-sqlite3')
 
   const dbFileName = 'msleuth.sqlite'
-  const dbFilePath = path.resolve('src', 'database', dbFileName)
-  const db = drizzle(`file://${dbFilePath}`, { casing: 'snake_case', schema })
+  const dbFilePath = path.resolve(process.cwd(), dbFileName)
+  const db = drizzle(dbFilePath, { casing: 'snake_case', schema })
 
   return db
 }
@@ -27,7 +27,7 @@ async function getBunSQLite() {
   const { drizzle } = await import('drizzle-orm/bun-sqlite')
 
   const dbFileName = 'msleuth.sqlite'
-  const dbFilePath = path.resolve('src', 'database', dbFileName)
+  const dbFilePath = path.resolve(process.cwd(), dbFileName)
   const db = drizzle(dbFilePath, { casing: 'snake_case', schema })
 
   return db
@@ -35,7 +35,7 @@ async function getBunSQLite() {
 
 export async function getDB() {
   const runtime = getRuntimeKey()
-  const dbFunctions = { bun: getBunSQLite, node: getLibSQL, workd: getD1 }
+  const dbFunctions = { bun: getBunSQLite, node: getBetterSQLite3, workd: getD1 }
   if (!(runtime in dbFunctions)) {
     throw new Error(`Unsupported runtime: ${runtime}`)
   }

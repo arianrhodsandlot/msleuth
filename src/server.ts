@@ -33,7 +33,7 @@ app.get(
       return c.text('Home page for this environment is not supported yet. Use APIs directly.', 404)
     }
 
-    const template = path.resolve('src', 'templates', 'home.pug')
+    const template = path.resolve(import.meta.dirname, 'template.pug')
 
     const { action, inputs, platform } = c.req.valid('query')
 

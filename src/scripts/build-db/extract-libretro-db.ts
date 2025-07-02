@@ -1,7 +1,6 @@
 import crypto from 'node:crypto'
 import path from 'node:path'
-import type { LibSQLDatabase } from 'drizzle-orm/libsql'
-import { drizzle } from 'drizzle-orm/libsql/web'
+import { type BetterSQLite3Database, drizzle } from 'drizzle-orm/better-sqlite3'
 import { camelCase, chunk, mapKeys } from 'es-toolkit'
 import fs from 'fs-extra'
 import { parse } from 'goodcodes-parser'
@@ -34,7 +33,7 @@ function getCompactName(name: string) {
   return name.replaceAll(/[^\p{Letter}\p{Mark}\p{Number}]/gu, '').toLowerCase()
 }
 
-async function extractLibretroDb(rdbPath: string, db: LibSQLDatabase) {
+async function extractLibretroDb(rdbPath: string, db: BetterSQLite3Database) {
   const platform = path.parse(rdbPath).name
   const libretrodb = await Libretrodb.from(rdbPath, { indexHashes: false })
   const entries = libretrodb.getEntries()
@@ -60,9 +59,9 @@ async function extractLibretroDb(rdbPath: string, db: LibSQLDatabase) {
 async function extractLibretroDbs() {
   const db = drizzle({
     casing: 'snake_case',
-    connection: path.resolve(import.meta.dirname, '..', '..', 'database', 'msleuth.sqlite'),
+    connection: path.resolve(process.cwd(), 'msleuth.sqlite'),
   })
-  const libretroDbDirectory = path.resolve(import.meta.dirname, 'tmp', 'inputs', 'libretro', 'database-rdb')
+  const libretroDbDirectory = path.resolve('tmp', 'inputs', 'libretro', 'database-rdb')
   const rdbs = await fs.readdir(libretroDbDirectory)
   const rdbPaths = rdbs.map((rdb) => path.resolve(libretroDbDirectory, rdb))
   for (const rdbPath of rdbPaths) {

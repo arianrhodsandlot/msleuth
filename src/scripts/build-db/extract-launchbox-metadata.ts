@@ -2,8 +2,7 @@ import crypto from 'node:crypto'
 import { createReadStream } from 'node:fs'
 import { readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
-import type { LibSQLDatabase } from 'drizzle-orm/libsql'
-import { drizzle } from 'drizzle-orm/libsql/web'
+import { type BetterSQLite3Database, drizzle } from 'drizzle-orm/better-sqlite3'
 import { camelCase, chunk, noop } from 'es-toolkit'
 import { parse } from 'goodcodes-parser'
 import sax from 'sax'
@@ -14,7 +13,7 @@ import {
   launchboxPlatformTable,
 } from '../../database/schema.ts'
 
-const xmlPath = path.resolve(import.meta.dirname, 'tmp/inputs/launchbox/metadata/Metadata.xml')
+const xmlPath = path.resolve(process.cwd(), 'tmp/inputs/launchbox/metadata/Metadata.xml')
 
 type Records = Record<string, string>[]
 
@@ -142,7 +141,7 @@ function getCompactName(name: string) {
   return name.replaceAll(/[^\p{Letter}\p{Mark}\p{Number}]/gu, '').toLowerCase()
 }
 
-async function writeLaunchboxPlatform(records: Records, db: LibSQLDatabase) {
+async function writeLaunchboxPlatform(records: Records, db: BetterSQLite3Database) {
   await db
     .insert(launchboxPlatformTable)
     .values(
@@ -158,7 +157,7 @@ async function writeLaunchboxPlatform(records: Records, db: LibSQLDatabase) {
     .onConflictDoNothing()
 }
 
-async function writeLaunchboxPlatformAlternateName(records: Records, db: LibSQLDatabase) {
+async function writeLaunchboxPlatformAlternateName(records: Records, db: BetterSQLite3Database) {
   await db
     .insert(launchboxPlatformAlternateNameTable)
     .values(
@@ -171,7 +170,7 @@ async function writeLaunchboxPlatformAlternateName(records: Records, db: LibSQLD
     .onConflictDoNothing()
 }
 
-async function writeLaunchboxGameAlternateName(records: Records, db: LibSQLDatabase) {
+async function writeLaunchboxGameAlternateName(records: Records, db: BetterSQLite3Database) {
   for (const recordsChunk of chunk(records, 1000)) {
     await db
       .insert(launchboxGameAlternateNameTable)
@@ -189,7 +188,7 @@ async function writeLaunchboxGameAlternateName(records: Records, db: LibSQLDatab
   }
 }
 
-async function writeLaunchboxGame(records: Records, db: LibSQLDatabase) {
+async function writeLaunchboxGame(records: Records, db: BetterSQLite3Database) {
   const recordsChunks = chunk(records, 1000)
   for (const recordsChunk of recordsChunks) {
     console.info(
@@ -217,12 +216,14 @@ async function writeLaunchboxGame(records: Records, db: LibSQLDatabase) {
 
 const loadMetadataFromCache = true
 const cachePathMap = {
-  Game: path.resolve(import.meta.dirname, 'tmp/artifacts/launchbox-metadata-game.json'),
-  GameAlternateName: path.resolve(import.meta.dirname, 'tmp/artifacts/launchbox-metadata-game-alternate-names.json'),
-  Platform: path.resolve(import.meta.dirname, 'tmp/artifacts/launchbox-metadata-platforms.json'),
+  Game: path.resolve(process.cwd(), 'tmp', 'artifacts', 'launchbox-metadata-game.json'),
+  GameAlternateName: path.resolve(process.cwd(), 'tmp', 'artifacts', 'launchbox-metadata-game-alternate-names.json'),
+  Platform: path.resolve(process.cwd(), 'tmp', 'artifacts', 'launchbox-metadata-platforms.json'),
   PlatformAlternateName: path.resolve(
-    import.meta.dirname,
-    'tmp/artifacts/launchbox-metadata-platform-alternate-names.json',
+    process.cwd(),
+    'tmp',
+    'artifacts',
+    'launchbox-metadata-platform-alternate-names.json',
   ),
 }
 
@@ -259,7 +260,7 @@ async function extractLaunchboxMetadata() {
 
   const db = drizzle({
     casing: 'snake_case',
-    connection: path.resolve(import.meta.dirname, '../..', 'database/msleuth.sqlite'),
+    connection: path.resolve(process.cwd(), 'msleuth.sqlite'),
   })
 
   console.info('writing metadata.Platform...')
