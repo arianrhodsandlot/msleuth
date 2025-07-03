@@ -1,5 +1,5 @@
 import test, { describe } from 'node:test'
-import { sleuth } from '../src/apis.ts'
+import { sleuth } from '../src/controllers/sleuth.ts'
 
 describe('sleuth', () => {
   test('sleuth with name', async (t) => {

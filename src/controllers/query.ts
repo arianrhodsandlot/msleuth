@@ -4,7 +4,7 @@ import { launchboxGameTable, libretroGameTable } from '../database/schema.ts'
 import { executeQuery } from '../utils.ts'
 
 export async function query(conditions: { launchboxId: number; libretroId: string }[]) {
-  const db = await getDB()
+  const db = getDB()
 
   const launchboxQuery = db
     .select()

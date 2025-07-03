@@ -1,4 +1,5 @@
 .wrangler
+*.gen.ts
 dist
 migrations
 msleuth.sql

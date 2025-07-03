@@ -1,14 +1,12 @@
-import path from 'node:path'
-import { serve } from '@hono/node-server'
 import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
 import { contextStorage } from 'hono/context-storage'
 import { logger } from 'hono/logger'
-import { renderFile } from 'pug'
 import { z } from 'zod'
 import { platforms } from './constants/platform.ts'
 import { query } from './controllers/query.ts'
 import { sleuth } from './controllers/sleuth.ts'
+import { render } from './template/template.gen.ts'
 import { safeParseJson5 } from './utils.ts'
 
 const app = new Hono()
@@ -29,12 +27,6 @@ app.get(
     }),
   ),
   async (c) => {
-    if (!import.meta.dirname) {
-      return c.text('Home page for this environment is not supported yet. Use APIs directly.', 404)
-    }
-
-    const template = path.resolve(import.meta.dirname, 'template.pug')
-
     const { action, inputs, platform } = c.req.valid('query')
 
     const parsedInputs = inferInputs(inputs)
@@ -70,7 +62,7 @@ app.get(
       }
     }
 
-    const html = renderFile(template, locals)
+    const html = render(locals)
     return c.html(html)
   },
 )
@@ -88,6 +80,4 @@ app.get('/api/v1/sleuth', async (c) => {
   return c.json(results)
 })
 
-serve(app, (info) => {
-  console.info(`MSleuth Server is running at http://localhost:${info.port}`)
-})
+export { app }

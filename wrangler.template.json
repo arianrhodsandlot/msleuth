@@ -1,0 +1,25 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "compatibility_date": "2025-07-03",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "d1_databases": [
+    {
+      "binding": "MSLEUTH_DB",
+      "database_id": "${MSLEUTH_DB_DATABASE_ID}",
+      "database_name": "msleuth-db",
+      "migrations_dir": "src/database/migrations"
+    }
+  ],
+  "main": "./dist/index.js",
+  "name": "msleuth",
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "placement": {
+    "mode": "smart"
+  },
+  "upload_source_maps": true
+}

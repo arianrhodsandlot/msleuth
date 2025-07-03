@@ -4,7 +4,7 @@ import { LibretroProvider } from '../providers/libretro.ts'
 import type { ROMFile } from '../types/file.ts'
 
 export async function sleuth(platform: string, files: ROMFile[]) {
-  const db = await getDB()
+  const db = getDB()
 
   const libretroProvider = new LibretroProvider({ db })
   const libretroMetadataList = await libretroProvider.guess(platform, files)

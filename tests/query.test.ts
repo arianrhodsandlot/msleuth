@@ -1,5 +1,5 @@
 import test, { describe } from 'node:test'
-import { query } from '../src/apis.ts'
+import { query } from '../src/controllers/query.ts'
 
 describe('query', () => {
   test('query', async (t) => {
