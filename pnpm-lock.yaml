@@ -2257,8 +2257,8 @@ packages:
     peerDependencies:
       eslint: '>=9.22.0'
 
-  eslint-plugin-vue-scoped-css@2.10.0:
-    resolution: {integrity: sha512-oH2NY7XFHF3EGOotvuPdnhB0x4uOmjoRoWZVfMnJ2PILDKVgZgM8WZ0rhDlh+fsr9jO9P8CAXO5/9s9v/GZNhg==}
+  eslint-plugin-vue-scoped-css@2.11.0:
+    resolution: {integrity: sha512-rrJgLY8iroTIUMSyxhyhJzFcRxABbk3gFrOLkl41F9G1VBqNNpDShyf6PmDoBEWDk07/bJlnqYlvnQ3giUrRYQ==}
     engines: {node: ^12.22 || ^14.17 || >=16}
     peerDependencies:
       eslint: '>=5.0.0'
@@ -3373,6 +3373,10 @@ packages:
     resolution: {integrity: sha512-Q8qQfPiZ+THO/3ZrOrO0cJJKfpYCagtMUkXbnEfmgUjwXg6z/WBeOyS9APBBPCTSiDV+s4SwQGu8yFsiMRIudg==}
     engines: {node: '>=4'}
 
+  postcss-selector-parser@7.1.0:
+    resolution: {integrity: sha512-8sLjZwK0R+JlxlYcTuVnyT2v+htpdrjDOKuMcOVdYjt52Lh8hWRYpxBPoKx/Zg+bcjc3wx6fmQevMmUztS/ccA==}
+    engines: {node: '>=4'}
+
   postcss-styl@0.12.3:
     resolution: {integrity: sha512-8I7Cd8sxiEITIp32xBK4K/Aj1ukX6vuWnx8oY/oAH35NfQI4OZaY5nd68Yx8HeN5S49uhQ6DL0rNk0ZBu/TaLg==}
     engines: {node: ^8.10.0 || ^10.13.0 || ^11.10.1 || >=12.13.0}
@@ -4159,7 +4163,7 @@ snapshots:
       eslint-plugin-tsdoc: 0.4.0
       eslint-plugin-unicorn: 58.0.0(eslint@9.30.1(jiti@2.4.2))
       eslint-plugin-vue: 10.3.0(@typescript-eslint/parser@8.35.1(eslint@9.30.1(jiti@2.4.2))(typescript@5.8.3))(eslint@9.30.1(jiti@2.4.2))(vue-eslint-parser@10.2.0(eslint@9.30.1(jiti@2.4.2)))
-      eslint-plugin-vue-scoped-css: 2.10.0(eslint@9.30.1(jiti@2.4.2))(vue-eslint-parser@10.2.0(eslint@9.30.1(jiti@2.4.2)))
+      eslint-plugin-vue-scoped-css: 2.11.0(eslint@9.30.1(jiti@2.4.2))(vue-eslint-parser@10.2.0(eslint@9.30.1(jiti@2.4.2)))
       eslint-plugin-vuejs-accessibility: 2.4.1(eslint@9.30.1(jiti@2.4.2))
       get-tsconfig: 4.10.1
       globals: 16.3.0
@@ -6264,7 +6268,7 @@ snapshots:
       semver: 7.7.2
       strip-indent: 4.0.0
 
-  eslint-plugin-vue-scoped-css@2.10.0(eslint@9.30.1(jiti@2.4.2))(vue-eslint-parser@10.2.0(eslint@9.30.1(jiti@2.4.2))):
+  eslint-plugin-vue-scoped-css@2.11.0(eslint@9.30.1(jiti@2.4.2))(vue-eslint-parser@10.2.0(eslint@9.30.1(jiti@2.4.2))):
     dependencies:
       '@eslint-community/eslint-utils': 4.7.0(eslint@9.30.1(jiti@2.4.2))
       eslint: 9.30.1(jiti@2.4.2)
@@ -6273,7 +6277,7 @@ snapshots:
       postcss: 8.5.6
       postcss-safe-parser: 6.0.0(postcss@8.5.6)
       postcss-scss: 4.0.9(postcss@8.5.6)
-      postcss-selector-parser: 6.1.2
+      postcss-selector-parser: 7.1.0
       postcss-styl: 0.12.3
       vue-eslint-parser: 10.2.0(eslint@9.30.1(jiti@2.4.2))
     transitivePeerDependencies:
@@ -7589,6 +7593,11 @@ snapshots:
       postcss: 8.5.6
 
   postcss-selector-parser@6.1.2:
+    dependencies:
+      cssesc: 3.0.0
+      util-deprecate: 1.0.2
+
+  postcss-selector-parser@7.1.0:
     dependencies:
       cssesc: 3.0.0
       util-deprecate: 1.0.2

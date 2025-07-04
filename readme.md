@@ -9,10 +9,29 @@ MSleuth is an API service for matching and fetching metadata for video game ROM 
 MSleuth provides a lightweight HTTP server with the following endpoints:
 
 ```
-GET /api/v1/query?conditions=[{"launchboxId":123,"libretroId":"abc"}]
+POST /api/v1/query
+Body: {
+  "conditions": [
+    {
+      "launchboxId": 123,
+      "libretroId": "abc"
+    }
+  ]
+}
 Response: [{ launchbox: {...}, libretro: {...} }]
+```
 
-GET /api/v1/sleuth?platform=nes&files=[...]
+```
+POST /api/v1/sleuth
+Body: {
+  "platform": "nes",
+  "files": [
+    {
+      "name": "game.nes",
+      "md5": "abc123..." // optional
+    }
+  ]
+}
 Response: [{ launchbox: {...}, libretro: {...} }]
 ```
 

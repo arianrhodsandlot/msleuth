@@ -67,17 +67,49 @@ app.get(
   },
 )
 
-app.get('/api/v1/query', async (c) => {
-  const conditions = JSON.parse(c.req.query('conditions') || '')
-  const results = await query(conditions)
-  return c.json(results)
-})
+app.post(
+  '/api/v1/query',
 
-app.get('/api/v1/sleuth', async (c) => {
-  const platform = c.req.query('platform') || ''
-  const files = JSON.parse(c.req.query('files') || '')
-  const results = await sleuth(platform, files)
-  return c.json(results)
-})
+  zValidator(
+    'json',
+    z.object({
+      conditions: z.array(
+        z.object({
+          launchboxId: z.number(),
+          libretroId: z.string(),
+        }),
+      ),
+    }),
+  ),
+
+  async (c) => {
+    const { conditions } = c.req.valid('json')
+    const results = await query(conditions)
+    return c.json(results)
+  },
+)
+
+app.post(
+  '/api/v1/sleuth',
+
+  zValidator(
+    'json',
+    z.object({
+      files: z.array(
+        z.object({
+          md5: z.string().optional(),
+          name: z.string(),
+        }),
+      ),
+      platform: z.string(),
+    }),
+  ),
+
+  async (c) => {
+    const { files, platform } = c.req.valid('json')
+    const results = await sleuth(platform, files)
+    return c.json(results)
+  },
+)
 
 export { app }
