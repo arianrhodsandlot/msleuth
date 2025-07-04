@@ -1,6 +1,7 @@
 import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
 import { contextStorage } from 'hono/context-storage'
+import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
 import { z } from 'zod'
 import { platforms } from './constants/platform.ts'
@@ -11,7 +12,7 @@ import { safeParseJson5 } from './utils.ts'
 
 const app = new Hono()
 
-app.use(logger(), contextStorage())
+app.use(logger(), contextStorage(), cors())
 
 // test urls:
 // http://localhost:3000/?action=query&platform=arcade&inputs=%5B%7B%22launchboxId%22%3A140%2C%22libretroId%22%3A%2223a02b3f92193510329426621b8a23fd94ad886e%22%7D%5D
