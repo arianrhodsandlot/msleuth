@@ -3,7 +3,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "tsdown",
+    "build": "node src/scripts/build.ts",
     "build:d1-sql": "node src/scripts/build-d1-sql.ts",
     "build:db": "node src/scripts/build-db/build-db.ts",
     "build:template": "node src/scripts/build-template.ts",
@@ -25,7 +25,7 @@
     "@hono/zod-validator": "0.7.0",
     "@tsconfig/node-ts": "23.6.1",
     "@tsconfig/node24": "24.0.1",
-    "@types/bun": "1.2.17",
+    "@types/bun": "1.2.18",
     "@types/fs-extra": "11.0.4",
     "@types/node": "24.0.10",
     "@types/pug": "2.0.10",
@@ -50,7 +50,7 @@
     "simple-git-hooks": "2.13.0",
     "tsdown": "0.12.9",
     "wrangler": "4.23.0",
-    "zod": "3.25.71"
+    "zod": "3.25.72"
   },
   "packageManager": "pnpm@10.12.4",
   "engines": {
