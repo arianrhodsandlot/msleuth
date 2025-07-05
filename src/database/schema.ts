@@ -35,10 +35,8 @@ export const launchboxGameTable = sqliteTable(
     wikipediaUrl: text(),
   },
   (table) => [
-    index('idx_launchbox_games_platform').on(table.platform),
-    index('idx_launchbox_games_platform_compact_name').on(table.platform, table.compactName),
-    index('idx_launchbox_games_platform_goodcodes_cn').on(table.platform, table.goodcodesBaseCompactName),
-    index('idx_launchbox_games_platform_database_id').on(table.platform, table.databaseId),
+    index('idx_launchbox_games_compact_name').on(table.compactName),
+    index('idx_launchbox_games_goodcodes_compact_name').on(table.goodcodesBaseCompactName),
   ],
 )
 
@@ -114,11 +112,10 @@ export const libretroGameTable = sqliteTable(
     users: integer(),
   },
   (table) => [
-    index('idx_libretro_games_platform').on(table.platform),
-    index('idx_libretro_games_platform_md5').on(table.platform, table.md5),
-    index('idx_libretro_games_platform_rom_name').on(table.platform, table.romName),
-    index('idx_libretro_games_platform_name').on(table.platform, table.name),
-    index('idx_libretro_games_platform_compact_name').on(table.platform, table.compactName),
-    index('idx_libretro_games_platform_goodcodes_base_compact_name').on(table.platform, table.goodcodesBaseCompactName),
+    index('idx_libretro_games_md5').on(table.md5),
+    index('idx_libretro_games_rom_name').on(table.romName),
+    index('idx_libretro_games_name').on(table.name),
+    index('idx_libretro_games_compact_name').on(table.compactName),
+    index('idx_libretro_games_goodcodes_base_compact_name').on(table.goodcodesBaseCompactName),
   ],
 )

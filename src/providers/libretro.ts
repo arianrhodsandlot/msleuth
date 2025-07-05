@@ -60,8 +60,8 @@ export class LibretroProvider {
       .from(libretroGameTable)
       .where(
         and(
-          inArray(libretroGameTable.platform, libretroPlatforms),
           or(...filters.map(({ column, values }) => inArray(column, values))),
+          inArray(libretroGameTable.platform, libretroPlatforms),
         ),
       )
 

@@ -38,7 +38,7 @@
     "execa": "9.6.0",
     "fs-extra": "11.3.0",
     "goodcodes-parser": "2.5.0",
-    "hono": "4.8.3",
+    "hono": "4.8.4",
     "jiti": "2.4.2",
     "json5": "2.2.3",
     "libretrodb": "1.0.0",
@@ -50,7 +50,7 @@
     "simple-git-hooks": "2.13.0",
     "tsdown": "0.12.9",
     "wrangler": "4.23.0",
-    "zod": "3.25.72"
+    "zod": "3.25.74"
   },
   "packageManager": "pnpm@10.12.4",
   "engines": {

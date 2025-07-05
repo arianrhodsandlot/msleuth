@@ -32,7 +32,6 @@ export class LaunchboxProvider {
       .from(launchboxGameTable)
       .where(
         and(
-          eq(launchboxGameTable.platform, platformLaunchboxName),
           or(
             ...filters.map(({ column, values }) => inArray(column, values)),
             inArray(
@@ -40,6 +39,7 @@ export class LaunchboxProvider {
               extendedFiles.flatMap(({ alternateDatabaseIds }) => alternateDatabaseIds),
             ),
           ),
+          eq(launchboxGameTable.platform, platformLaunchboxName),
         ),
       )
 
