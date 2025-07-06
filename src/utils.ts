@@ -1,4 +1,6 @@
 import { sql } from 'drizzle-orm'
+import { env } from 'hono/adapter'
+import { getContext } from 'hono/context-storage'
 import json5 from 'json5'
 import type { DB } from './database/index.ts'
 
@@ -6,9 +8,16 @@ export function getCompactName(name: string) {
   return name.replaceAll(/[^\p{Letter}\p{Mark}\p{Number}]/gu, '').toLowerCase()
 }
 
-const isProduction = process.env.NODE_ENV === 'production'
+function checkIsProduction() {
+  let nodeenv
+  try {
+    nodeenv = env(getContext()).NODE_ENV
+  } catch {}
+  return nodeenv === 'production'
+}
+
 export async function executeQuery<T>(db: DB, query: T) {
-  if (!isProduction) {
+  if (!checkIsProduction()) {
     // @ts-expect-error
     const plans = await db.all(sql`EXPLAIN QUERY PLAN ${query.getSQL()}`)
     // @ts-expect-error
