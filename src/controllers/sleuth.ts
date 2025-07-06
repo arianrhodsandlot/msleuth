@@ -14,8 +14,7 @@ export async function sleuth(platform: string, files: ROMFile[]) {
     platform,
     files.map((file, index) => ({
       ...file,
-      compactName: libretroMetadataList[index]?.compactName,
-      goodcodesBaseCompactName: libretroMetadataList[index]?.goodcodesBaseCompactName,
+      name: libretroMetadataList[index]?.name || file.name,
     })),
   )
 
