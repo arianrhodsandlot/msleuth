@@ -1,5 +1,5 @@
 import path from 'node:path'
-import { and, eq, inArray, or } from 'drizzle-orm'
+import { and, type Column, eq, inArray, or } from 'drizzle-orm'
 import { parse } from 'goodcodes-parser'
 import { platformMap } from '../constants/platform.ts'
 import type { DB } from '../database/index.ts'
@@ -20,25 +20,23 @@ export class LaunchboxProvider {
 
     const columns = ['compactName', 'goodcodesBaseCompactName'] as const
 
-    const filters = columns
-      .map((column) => ({
-        column: launchboxGameTable[column],
-        values: extendedFiles.map(({ [column]: value }) => value || '').filter(Boolean),
-      }))
-      .filter(({ values }) => values.length)
+    type Filter = { column: Column; values: (number | string)[] }
+    const filters: Filter[] = columns.map((column) => ({
+      column: launchboxGameTable[column],
+      values: extendedFiles.map(({ [column]: value }) => value || '').filter(Boolean),
+    }))
+    filters.push({
+      column: launchboxGameTable.databaseId,
+      values: extendedFiles.flatMap(({ alternateDatabaseIds }) => alternateDatabaseIds),
+    })
+    const validFilters = filters.filter(({ values }) => values.length)
 
     const query = this.db
       .select()
       .from(launchboxGameTable)
       .where(
         and(
-          or(
-            ...filters.map(({ column, values }) => inArray(column, values)),
-            inArray(
-              launchboxGameTable.databaseId,
-              extendedFiles.flatMap(({ alternateDatabaseIds }) => alternateDatabaseIds),
-            ),
-          ),
+          or(...validFilters.map(({ column, values }) => inArray(column, values))),
           eq(launchboxGameTable.platform, platformLaunchboxName),
         ),
       )

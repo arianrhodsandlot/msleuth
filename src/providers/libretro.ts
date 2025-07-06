@@ -46,12 +46,11 @@ export class LibretroProvider {
   ) {
     const extendedFiles = this.getExtendedFiles(files)
 
-    const filters = columns
-      .map((column) => ({
-        column: libretroGameTable[column],
-        values: extendedFiles.map(({ [column]: value }) => value || '').filter(Boolean),
-      }))
-      .filter(({ values }) => values.length)
+    const filters = columns.map((column) => ({
+      column: libretroGameTable[column],
+      values: extendedFiles.map(({ [column]: value }) => value || '').filter(Boolean),
+    }))
+    const validFilters = filters.filter(({ values }) => values.length)
 
     const arcadeLibretroPlatforms = ['MAME', 'MAME 2003-Plus', 'FBNeo - Arcade Games']
     const libretroPlatforms = platform === 'arcade' ? arcadeLibretroPlatforms : [platformMap[platform].libretroName]
@@ -60,7 +59,7 @@ export class LibretroProvider {
       .from(libretroGameTable)
       .where(
         and(
-          or(...filters.map(({ column, values }) => inArray(column, values))),
+          or(...validFilters.map(({ column, values }) => inArray(column, values))),
           inArray(libretroGameTable.platform, libretroPlatforms),
         ),
       )
