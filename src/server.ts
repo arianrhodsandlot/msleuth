@@ -76,8 +76,8 @@ app.post(
     z.object({
       conditions: z.array(
         z.object({
-          launchboxId: z.number(),
-          libretroId: z.string(),
+          launchboxId: z.number().or(z.null()).optional(),
+          libretroId: z.string().or(z.null()).optional(),
         }),
       ),
     }),
