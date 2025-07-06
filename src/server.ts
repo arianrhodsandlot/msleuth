@@ -5,6 +5,7 @@ import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
 import { z } from 'zod'
 import { platforms } from './constants/platform.ts'
+import { getPlatformInfo } from './controllers/get-platform-info.ts'
 import { query } from './controllers/query.ts'
 import { sleuth } from './controllers/sleuth.ts'
 import { render } from './template/template.gen.ts'
@@ -110,6 +111,23 @@ app.post(
     const { files, platform } = c.req.valid('json')
     const results = await sleuth(platform, files)
     return c.json(results)
+  },
+)
+
+app.get(
+  '/api/v1/platform',
+
+  zValidator(
+    'query',
+    z.object({
+      name: z.string(),
+    }),
+  ),
+
+  async (c) => {
+    const { name } = c.req.valid('query')
+    const result = await getPlatformInfo(name)
+    return c.json(result)
   },
 )
 

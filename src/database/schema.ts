@@ -40,27 +40,23 @@ export const launchboxGameTable = sqliteTable(
   ],
 )
 
-export const launchboxPlatformTable = sqliteTable(
-  'launchbox_platforms',
-  {
-    category: text(),
-    cpu: text(),
-    developer: text(),
-    display: text(),
-    emulated: integer({ mode: 'boolean' }),
-    graphics: text(),
-    manufacturer: text(),
-    maxControllers: text(),
-    media: text(),
-    memory: text(),
-    name: text().primaryKey().notNull(),
-    notes: text(),
-    releaseDate: integer({ mode: 'timestamp_ms' }),
-    sound: text(),
-    useMameFiles: integer({ mode: 'boolean' }),
-  },
-  (table) => [index('idx_launchbox_platforms').on(table.name)],
-)
+export const launchboxPlatformTable = sqliteTable('launchbox_platforms', {
+  category: text(),
+  cpu: text(),
+  developer: text(),
+  display: text(),
+  emulated: integer({ mode: 'boolean' }),
+  graphics: text(),
+  manufacturer: text(),
+  maxControllers: text(),
+  media: text(),
+  memory: text(),
+  name: text().primaryKey().notNull(),
+  notes: text(),
+  releaseDate: integer({ mode: 'timestamp_ms' }),
+  sound: text(),
+  useMameFiles: integer({ mode: 'boolean' }),
+})
 
 export const launchboxPlatformAlternateNameTable = sqliteTable(
   'launchbox_platform_alternate_names',
