@@ -6,8 +6,8 @@ import { logger } from 'hono/logger'
 import { z } from 'zod'
 import { platforms } from './constants/platform.ts'
 import { getPlatformInfo } from './controllers/get-platform-info.ts'
+import { identify } from './controllers/identify.ts'
 import { query } from './controllers/query.ts'
-import { sleuth } from './controllers/sleuth.ts'
 import { render } from './template/template.gen.ts'
 import { safeParseJson5 } from './utils.ts'
 
@@ -17,13 +17,13 @@ app.use(logger(), contextStorage(), cors())
 
 // test urls:
 // http://localhost:3000/?action=query&platform=arcade&inputs=%5B%7B%22launchboxId%22%3A140%2C%22libretroId%22%3A%2223a02b3f92193510329426621b8a23fd94ad886e%22%7D%5D
-// http://localhost:3000/?action=sleuth&platform=arcade&inputs=mslug.zip
+// http://localhost:3000/?action=identify&platform=arcade&inputs=mslug.zip
 app.get(
   '/',
   zValidator(
     'query',
     z.object({
-      action: z.enum(['sleuth', 'query']).optional(),
+      action: z.enum(['identify', 'query']).optional(),
       inputs: z.string().default(''),
       platform: z.string().default(''),
     }),
@@ -41,7 +41,7 @@ app.get(
         if (inputs.startsWith('{')) {
           return inferInputs(`[${inputs}]`)
         }
-        if (action === 'sleuth') {
+        if (action === 'identify') {
           return inferInputs(inputs.includes('.') ? `{name:'${inputs}'}` : `{md5:'${inputs}'}`)
         }
         if (action === 'query') {
@@ -55,11 +55,11 @@ app.get(
 
     if (action && parsedInputs) {
       switch (action) {
+        case 'identify':
+          locals.results = await identify(platform, parsedInputs)
+          break
         case 'query':
           locals.results = await query(parsedInputs)
-          break
-        case 'sleuth':
-          locals.results = await sleuth(platform, parsedInputs)
           break
       }
     }
@@ -70,7 +70,30 @@ app.get(
 )
 
 app.post(
-  '/api/v1/query',
+  '/api/v1/metadata/identify',
+
+  zValidator(
+    'json',
+    z.object({
+      files: z.array(
+        z.object({
+          md5: z.string().optional(),
+          name: z.string(),
+        }),
+      ),
+      platform: z.string(),
+    }),
+  ),
+
+  async (c) => {
+    const { files, platform } = c.req.valid('json')
+    const results = await identify(platform, files)
+    return c.json(results)
+  },
+)
+
+app.post(
+  '/api/v1/metadata/query',
 
   zValidator(
     'json',
@@ -91,41 +114,18 @@ app.post(
   },
 )
 
-app.post(
-  '/api/v1/sleuth',
-
-  zValidator(
-    'json',
-    z.object({
-      files: z.array(
-        z.object({
-          md5: z.string().optional(),
-          name: z.string(),
-        }),
-      ),
-      platform: z.string(),
-    }),
-  ),
-
-  async (c) => {
-    const { files, platform } = c.req.valid('json')
-    const results = await sleuth(platform, files)
-    return c.json(results)
-  },
-)
-
 app.get(
-  '/api/v1/platform',
+  '/api/v1/platform/:name',
 
   zValidator(
-    'query',
+    'param',
     z.object({
       name: z.string(),
     }),
   ),
 
   async (c) => {
-    const { name } = c.req.valid('query')
+    const { name } = c.req.valid('param')
     const result = await getPlatformInfo(name)
     return c.json(result)
   },

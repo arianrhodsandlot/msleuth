@@ -3,7 +3,7 @@ import { LaunchboxProvider } from '../providers/launchbox.ts'
 import { LibretroProvider } from '../providers/libretro.ts'
 import type { ROMFile } from '../types/file.ts'
 
-export async function sleuth(platform: string, files: ROMFile[]) {
+export async function identify(platform: string, files: ROMFile[]) {
   const db = getDB()
 
   const libretroProvider = new LibretroProvider({ db })
