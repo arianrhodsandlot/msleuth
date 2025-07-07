@@ -50,7 +50,7 @@
     "simple-git-hooks": "2.13.0",
     "tsdown": "0.12.9",
     "wrangler": "4.23.0",
-    "zod": "3.25.74"
+    "zod": "3.25.75"
   },
   "packageManager": "pnpm@10.12.4",
   "engines": {
