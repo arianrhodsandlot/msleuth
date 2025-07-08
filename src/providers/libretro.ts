@@ -14,8 +14,8 @@ export class LibretroProvider {
     this.db = db
   }
 
-  async guess(platform: string, files: ROMFile[]) {
-    const md5Results = await this.guessByColumns(platform, files, ['md5'])
+  async identify(platform: string, files: ROMFile[]) {
+    const md5Results = await this.identifyByColumns(platform, files, ['md5'])
     if (md5Results.every(Boolean)) {
       return md5Results
     }
@@ -23,7 +23,7 @@ export class LibretroProvider {
     const arcadeNameColumns = ['romName'] as const
     const generalNameColumns = ['romName', 'name', 'compactName', 'goodcodesBaseCompactName'] as const
     const nameColumns = platform === 'arcade' ? arcadeNameColumns : generalNameColumns
-    const nameResults = await this.guessByColumns(platform, files, nameColumns)
+    const nameResults = await this.identifyByColumns(platform, files, nameColumns)
 
     return files.map((file, index) => md5Results[index] || nameResults[index])
   }
@@ -39,7 +39,7 @@ export class LibretroProvider {
     return extendedFiles
   }
 
-  private async guessByColumns(
+  private async identifyByColumns(
     platform: string,
     files: ROMFile[],
     columns: readonly ('compactName' | 'goodcodesBaseCompactName' | 'md5' | 'name' | 'romName')[],
@@ -51,6 +51,9 @@ export class LibretroProvider {
       values: extendedFiles.map(({ [column]: value }) => value || '').filter(Boolean),
     }))
     const validFilters = filters.filter(({ values }) => values.length)
+    if (validFilters.length === 0) {
+      return Array.from({ length: files.length }).fill(null)
+    }
 
     const arcadeLibretroPlatforms = ['MAME', 'MAME 2003-Plus', 'FBNeo - Arcade Games']
     const libretroPlatforms = platform === 'arcade' ? arcadeLibretroPlatforms : [platformMap[platform].libretroName]

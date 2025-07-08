@@ -7,10 +7,10 @@ export async function identify(platform: string, files: ROMFile[]) {
   const db = getDB()
 
   const libretroProvider = new LibretroProvider({ db })
-  const libretroMetadataList = await libretroProvider.guess(platform, files)
+  const libretroMetadataList = await libretroProvider.identify(platform, files)
 
   const launchboxProvider = new LaunchboxProvider({ db })
-  const launchboxMetadataList = await launchboxProvider.guess(
+  const launchboxMetadataList = await launchboxProvider.identify(
     platform,
     files.map((file, index) => ({
       ...file,

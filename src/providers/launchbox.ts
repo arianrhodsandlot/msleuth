@@ -14,7 +14,7 @@ export class LaunchboxProvider {
     this.db = db
   }
 
-  async guess(platform: string, files: ROMFile[]) {
+  async identify(platform: string, files: ROMFile[]) {
     const platformLaunchboxName = platformMap[platform].launchboxName
     const extendedFiles = await this.getExtendedFiles(files)
 
@@ -30,6 +30,9 @@ export class LaunchboxProvider {
       values: extendedFiles.flatMap(({ alternateDatabaseIds }) => alternateDatabaseIds),
     })
     const validFilters = filters.filter(({ values }) => values.length)
+    if (validFilters.length === 0) {
+      return Array.from({ length: files.length }).fill(null)
+    }
 
     const query = this.db
       .select()
