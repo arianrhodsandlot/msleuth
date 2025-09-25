@@ -1,0 +1,8 @@
+app = 'msleuth'
+primary_region = 'lax'
+
+[build]
+
+[http_service]
+  internal_port = 3000
+  auto_stop_machines = 'stop'

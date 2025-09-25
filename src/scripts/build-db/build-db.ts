@@ -8,7 +8,7 @@ const tmp = path.join(process.cwd(), 'tmp')
 
 async function prepareZip(inputSubDirectory: string, url: string) {
   const inputDirectory = path.join(tmp, 'inputs', inputSubDirectory)
-  const { base, name } = path.parse(new URL(url).pathname)
+  const { base, name } = path.parse(new URL(url.toLowerCase()).pathname)
   const zipDirectory = path.join(inputDirectory, name)
   const zipPath = path.join(inputDirectory, base)
 
@@ -30,7 +30,7 @@ async function prepareZip(inputSubDirectory: string, url: string) {
 // Prepare the input metadata files
 await Promise.all([
   prepareZip('libretro', 'https://buildbot.libretro.com/assets/frontend/database-rdb.zip'),
-  prepareZip('launchbox', 'https://gamesdb.launchbox-app.com/metadata.zip'),
+  prepareZip('launchbox', 'https://gamesdb.launchbox-app.com/Metadata.zip'),
 ])
 await fs.remove(path.join('msleuth.sqlite'))
 await fs.mkdirp(path.join(tmp, 'artifacts'))
