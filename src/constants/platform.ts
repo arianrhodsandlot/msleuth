@@ -6,12 +6,15 @@ export type PlatformName =
   | 'atarilynx'
   | 'famicom'
   | 'fds'
+  | 'gameandwatch'
   | 'gamegear'
   | 'gb'
   | 'gba'
   | 'gbc'
   | 'genesis'
   | 'megadrive'
+  | 'msx'
+  | 'msx2'
   | 'nes'
   | 'ngp'
   | 'ngpc'
@@ -55,6 +58,21 @@ export const platforms: Platform[] = [
     launchboxName: 'Atari Lynx',
     libretroName: 'Atari - Lynx',
     name: 'atarilynx',
+  },
+  {
+    launchboxName: 'Nintendo Game & Watch',
+    libretroName: 'Handheld Electronic Game',
+    name: 'gameandwatch',
+  },
+  {
+    launchboxName: 'Microsoft MSX',
+    libretroName: 'Microsoft - MSX',
+    name: 'msx',
+  },
+  {
+    launchboxName: 'Microsoft MSX2',
+    libretroName: 'Microsoft - MSX2',
+    name: 'msx2',
   },
   {
     launchboxName: 'Nintendo Entertainment System',
