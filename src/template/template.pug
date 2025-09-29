@@ -17,8 +17,8 @@ html(lang='en')
               option(value=a selected=a === action)= a
         label.label.is-small.is-flex.is-justify-content-center.is-align-items-center.is-3.mx-2 Platform
           .select.mx-1: select(name='platform')
-            if platforms
-              each p in platforms
+            if platformMap
+              each p in Object.values(platformMap)
                 option(value=p.name selected=p.name === platform)= p.name
         label.label.is-small.is-flex.is-justify-content-center.is-align-items-center.is-3.mx-2 Inputs
           input.mx-1.is-small.input(type='text', name='inputs' value=inputs)

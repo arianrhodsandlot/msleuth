@@ -4,7 +4,7 @@ import { contextStorage } from 'hono/context-storage'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
 import { z } from 'zod'
-import { platforms } from './constants/platform.ts'
+import { platformMap } from './constants/platform.ts'
 import { getPlatformInfo } from './controllers/get-platform-info.ts'
 import { identify } from './controllers/identify.ts'
 import { query } from './controllers/query.ts'
@@ -51,7 +51,7 @@ app.get(
       return safeParseJson5(inputs)
     }
 
-    const locals = { action, c, inputs, platform, platforms, results: [] as any[] }
+    const locals = { action, c, inputs, platform, platformMap, results: [] as any[] }
 
     if (action && parsedInputs) {
       switch (action) {
