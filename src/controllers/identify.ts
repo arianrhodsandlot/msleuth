@@ -1,3 +1,4 @@
+import path from 'node:path'
 import { getDB } from '../database/index.ts'
 import { LaunchboxProvider } from '../providers/launchbox.ts'
 import { LibretroProvider } from '../providers/libretro.ts'
@@ -14,7 +15,7 @@ export async function identify(platform: string, files: ROMFile[]) {
     platform,
     files.map((file, index) => ({
       ...file,
-      name: libretroMetadataList[index]?.name || file.name,
+      name: libretroMetadataList[index] ? libretroMetadataList[index].name + path.parse(file.name).ext : file.name,
     })),
   )
 
