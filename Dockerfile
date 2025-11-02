@@ -1,4 +1,4 @@
-FROM node:alpine AS builder
+FROM node:24.11.0-alpine AS builder
 WORKDIR /app
 RUN apk update && \
     apk add unzip && \
