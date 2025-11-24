@@ -1,1 +1,1 @@
-export * from './adaptors/node.ts'
+export * from './adaptors/bun.ts'

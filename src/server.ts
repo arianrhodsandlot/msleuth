@@ -5,17 +5,10 @@ import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
 import { apis } from './apis.ts'
 
+const docPath = 'doc'
+
 export const app = new OpenAPIHono()
-
-app.use(logger(), contextStorage(), cors())
-
-app
-  .doc('doc', {
-    info: {
-      title: 'MSleuth API',
-      version: '1',
-    },
-    openapi: '3.1.1',
-  })
-  .get('reference', Scalar({ url: 'doc' }))
+  .doc(docPath, { info: { title: 'MSleuth API', version: '1' }, openapi: '3.1.1' })
+  .use(logger(), contextStorage(), cors())
+  .get('', Scalar({ url: docPath }))
   .route('api/v1', apis)

@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "compatibility_date": "2025-07-03",
+  "compatibility_date": "2025-11-24",
   "compatibility_flags": [
     "nodejs_compat"
   ],
@@ -23,6 +23,6 @@
   },
   "upload_source_maps": true,
   "vars": {
-    "NODE_ENV": "production"
+    "WORKERD_ENV": "production"
   }
 }

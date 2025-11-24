@@ -11,7 +11,7 @@ export function getCompactName(name: string) {
 function checkIsProduction() {
   let nodeenv
   try {
-    nodeenv = env(getContext()).NODE_ENV
+    nodeenv = env(getContext()).BUN_ENV || env(getContext()).WORKERD_ENV
   } catch {}
   return nodeenv === 'production'
 }

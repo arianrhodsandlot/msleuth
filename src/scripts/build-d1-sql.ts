@@ -23,5 +23,5 @@ await fs.writeFile(
     .join('\n'),
 )
 
-console.info(`Run "pnpm wrangler d1 execute msleuth-db --file=msleuth.sql" to import the data to local D1.`)
-console.info(`Run "pnpm wrangler d1 execute msleuth-db --remote --file=msleuth.sql" to import the data to remote D1.`)
+console.info(`Run "bun wrangler d1 execute msleuth-db --file=msleuth.sql" to import the data to local D1.`)
+console.info(`Run "bun wrangler d1 execute msleuth-db --remote --file=msleuth.sql" to import the data to remote D1.`)

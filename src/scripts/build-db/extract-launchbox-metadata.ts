@@ -49,8 +49,8 @@ const nonSupportedPlatforms = new Set([
   'Windows',
   'Windows 3.X',
 ])
-function isSupportedPlatform(platform: string) {
-  return !nonSupportedPlatforms.has(platform)
+function isSupportedPlatform(platform?: string) {
+  return platform && !nonSupportedPlatforms.has(platform)
 }
 
 function parseMetadata(filePath: string) {
@@ -88,10 +88,10 @@ function parseMetadata(filePath: string) {
         if (openingTag && openingTag in recordsMap) {
           if (openingTag === 'Game') {
             if (isSupportedPlatform(record.platform)) {
-              recordsMap[openingTag].push(record)
+              recordsMap[openingTag]?.push(record)
             }
           } else {
-            recordsMap[openingTag].push(record)
+            recordsMap[openingTag]?.push(record)
           }
         }
         record = {}
