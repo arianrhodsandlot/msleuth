@@ -1,11 +1,19 @@
 {
-  "private": true,
+  "name": "msleuth",
+  "version": "1.0.0",
   "license": "MIT",
+  "author": {
+    "name": "arianrhodsandlot",
+    "email": "theguidanceofawhitetower@gmail.com"
+  },
   "type": "module",
+  "exports": {
+    "client": "./src/client.ts",
+    "server": "./src/server.ts"
+  },
   "scripts": {
     "build": "bun src/scripts/build.ts",
     "build:d1-sql": "bun src/scripts/build-d1-sql.ts",
-    "build:wrangler-config": "bun src/scripts/build-wrangler-config.ts",
     "dev": "bun --watch src/index.ts",
     "setup": "bun src/scripts/setup/setup.ts",
     "test": "bun test"

@@ -11,5 +11,5 @@ await $$('bun', ['build', 'src/index.ts', '--outdir=dist', '--target=bun'])
 await fs.writeFile('src/database/index.ts', original)
 
 if (targetRuntime === 'workerd') {
-  await $$('bun', ['build:wrangler-config'])
+  await $$('bun', ['src/scripts/build-wrangler-config.ts'])
 }

@@ -1,7 +1,7 @@
 import { hc, parseResponse } from 'hono/client'
 import type { apis } from './apis.ts'
 
-export function create(host = 'https://msleuth.arianrhodsandlot.workers.dev') {
+export function createClient(host = 'https://msleuth.arianrhodsandlot.workers.dev') {
   const client = hc<typeof apis>(new URL('api/v1', host).href)
 
   return {
@@ -16,3 +16,5 @@ export function create(host = 'https://msleuth.arianrhodsandlot.workers.dev') {
     },
   }
 }
+
+export const msleuth = createClient()
