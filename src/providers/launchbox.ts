@@ -1,7 +1,7 @@
 import path from 'node:path'
 import { and, type Column, eq, inArray, or } from 'drizzle-orm'
 import { parse } from 'goodcodes-parser'
-import { platformMap } from '../constants/platform.ts'
+import { platformMap, type PlatformName } from '../constants/platform.ts'
 import type { DB } from '../database/index.ts'
 import { launchboxGameAlternateNameTable, launchboxGameTable } from '../database/schema.ts'
 import type { ROMFile } from '../types/file.ts'
@@ -15,7 +15,11 @@ export class LaunchboxProvider {
   }
 
   async identify(platform: string, files: ROMFile[]) {
-    const platformLaunchboxName = platformMap[platform].launchboxName
+    const platformLaunchboxName = platformMap[platform as PlatformName]?.launchboxName
+    if (!platformLaunchboxName) {
+      return Array.from<null>({ length: files.length }).fill(null)
+    }
+
     const extendedFiles = await this.getExtendedFiles(files)
 
     const columns = ['compactName', 'goodcodesBaseCompactName'] as const
@@ -31,7 +35,7 @@ export class LaunchboxProvider {
     })
     const validFilters = filters.filter(({ values }) => values.length)
     if (validFilters.length === 0) {
-      return Array.from({ length: files.length }).fill(null)
+      return Array.from<null>({ length: files.length }).fill(null)
     }
 
     const query = this.db

@@ -1,21 +1,20 @@
 import { createRoute, extendZodWithOpenApi, OpenAPIHono, z } from '@hono/zod-openapi'
 import { createSelectSchema } from 'drizzle-zod'
-import { z as zod } from 'zod'
 import { getPlatformInfo } from './controllers/get-platform-info.ts'
 import { identify } from './controllers/identify.ts'
 import { query } from './controllers/query.ts'
 import { launchboxGameTable, launchboxPlatformTable, libretroGameTable } from './database/schema.ts'
 
-extendZodWithOpenApi(zod)
+extendZodWithOpenApi(z)
 
-const LaunchboxGameSchema = createSelectSchema(launchboxGameTable).openapi('LaunchboxGame')
-const LibretroGameSchema = createSelectSchema(libretroGameTable).openapi('LibretroGame')
-const LaunchboxPlatformSchema = createSelectSchema(launchboxPlatformTable).openapi('LaunchboxPlatform')
+const LaunchboxGameSchema = createSelectSchema(launchboxGameTable)
+const LibretroGameSchema = createSelectSchema(libretroGameTable)
+const LaunchboxPlatformSchema = createSelectSchema(launchboxPlatformTable)
 
 const MetadataResponseSchema = z.array(
   z.object({
-    launchbox: LaunchboxGameSchema.optional(),
-    libretro: LibretroGameSchema.optional(),
+    launchbox: LaunchboxGameSchema.nullable().optional(),
+    libretro: LibretroGameSchema.nullable().optional(),
   }),
 )
 
@@ -65,7 +64,7 @@ export const apis = new OpenAPIHono()
     async (c) => {
       const { files, platform } = c.req.valid('json')
       const results = await identify(platform, files)
-      return c.json(results as any)
+      return c.json(results)
     },
   )
 
@@ -110,7 +109,7 @@ export const apis = new OpenAPIHono()
     async (c) => {
       const { conditions } = c.req.valid('json')
       const results = await query(conditions)
-      return c.json(results as any)
+      return c.json(results)
     },
   )
 
@@ -130,6 +129,6 @@ export const apis = new OpenAPIHono()
     async (c) => {
       const { name } = c.req.valid('param')
       const result = await getPlatformInfo(name)
-      return c.json(result as any)
+      return c.json(result)
     },
   )

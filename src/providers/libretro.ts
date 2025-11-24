@@ -1,7 +1,8 @@
 import path from 'node:path'
 import { and, inArray, or } from 'drizzle-orm'
+import { compact } from 'es-toolkit'
 import { parse } from 'goodcodes-parser'
-import { platformMap } from '../constants/platform.ts'
+import { platformMap, type PlatformName } from '../constants/platform.ts'
 import type { DB } from '../database/index.ts'
 import { libretroGameTable } from '../database/schema.ts'
 import type { ROMFile } from '../types/file.ts'
@@ -52,11 +53,12 @@ export class LibretroProvider {
     }))
     const validFilters = filters.filter(({ values }) => values.length)
     if (validFilters.length === 0) {
-      return Array.from({ length: files.length }).fill(null)
+      return Array.from<null>({ length: files.length }).fill(null)
     }
 
     const arcadeLibretroPlatforms = ['MAME', 'MAME 2003-Plus', 'FBNeo - Arcade Games']
-    const libretroPlatforms = platform === 'arcade' ? arcadeLibretroPlatforms : [platformMap[platform].libretroName]
+    const libretroPlatforms =
+      platform === 'arcade' ? arcadeLibretroPlatforms : compact([platformMap[platform as PlatformName]?.libretroName])
     const query = this.db
       .select()
       .from(libretroGameTable)
