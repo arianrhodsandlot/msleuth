@@ -2,7 +2,7 @@ import crypto from 'node:crypto'
 import { createReadStream } from 'node:fs'
 import { readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
-import { type BetterSQLite3Database, drizzle } from 'drizzle-orm/better-sqlite3'
+import { type BunSQLiteDatabase, drizzle } from 'drizzle-orm/bun-sqlite'
 import { camelCase, chunk, noop } from 'es-toolkit'
 import { parse } from 'goodcodes-parser'
 import sax from 'sax'
@@ -141,7 +141,7 @@ function getCompactName(name: string) {
   return name.replaceAll(/[^\p{Letter}\p{Mark}\p{Number}]/gu, '').toLowerCase()
 }
 
-async function writeLaunchboxPlatform(records: Records, db: BetterSQLite3Database) {
+async function writeLaunchboxPlatform(records: Records, db: BunSQLiteDatabase) {
   await db
     .insert(launchboxPlatformTable)
     .values(
@@ -157,7 +157,7 @@ async function writeLaunchboxPlatform(records: Records, db: BetterSQLite3Databas
     .onConflictDoNothing()
 }
 
-async function writeLaunchboxPlatformAlternateName(records: Records, db: BetterSQLite3Database) {
+async function writeLaunchboxPlatformAlternateName(records: Records, db: BunSQLiteDatabase) {
   await db
     .insert(launchboxPlatformAlternateNameTable)
     .values(
@@ -170,7 +170,7 @@ async function writeLaunchboxPlatformAlternateName(records: Records, db: BetterS
     .onConflictDoNothing()
 }
 
-async function writeLaunchboxGameAlternateName(records: Records, db: BetterSQLite3Database) {
+async function writeLaunchboxGameAlternateName(records: Records, db: BunSQLiteDatabase) {
   for (const recordsChunk of chunk(records, 1000)) {
     await db
       .insert(launchboxGameAlternateNameTable)
@@ -188,7 +188,7 @@ async function writeLaunchboxGameAlternateName(records: Records, db: BetterSQLit
   }
 }
 
-async function writeLaunchboxGame(records: Records, db: BetterSQLite3Database) {
+async function writeLaunchboxGame(records: Records, db: BunSQLiteDatabase) {
   const recordsChunks = chunk(records, 1000)
   for (const recordsChunk of recordsChunks) {
     console.info(

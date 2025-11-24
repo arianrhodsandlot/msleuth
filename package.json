@@ -14,7 +14,7 @@
   "scripts": {
     "build": "bun src/scripts/build.ts",
     "build:d1-sql": "bun src/scripts/build-d1-sql.ts",
-    "build:db": "bun src/scripts/build-db.ts",
+    "build:db": "bun src/scripts/build-db/build-db.ts",
     "dev": "bun --watch src/index.ts",
     "setup": "bun src/scripts/setup/setup.ts",
     "test": "bun test"

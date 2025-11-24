@@ -9,7 +9,7 @@ import { favicon } from './favicon.ts'
 const docPath = 'doc'
 
 export const app = new OpenAPIHono()
-  .doc(docPath, { info: { title: 'MSleuth', version: '1' }, openapi: '3.1.1' })
+  .doc(docPath, { info: { title: 'MSleuth', version: '1' }, openapi: '3.2.0' })
   .use(logger(), contextStorage(), cors())
   .get('', Scalar({ pageTitle: 'MSleuth', url: docPath }))
   .get('favicon.ico', (c) =>
