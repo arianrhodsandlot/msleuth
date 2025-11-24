@@ -1,0 +1,67 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="handleGradient" x1="310" y1="310" x2="440" y2="440" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5C5C5C"/>
+      <stop offset="1" stop-color="#2B2B2B"/>
+    </linearGradient>
+    <linearGradient id="rimGradient" x1="80" y1="80" x2="360" y2="360" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F5F5F5"/>
+      <stop offset="1" stop-color="#9E9E9E"/>
+    </linearGradient>
+    <radialGradient id="lensGradient" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(220 220) rotate(90) scale(120)">
+      <stop offset="0" stop-color="#E3F2FD" stop-opacity="0.3"/>
+      <stop offset="1" stop-color="#90CAF9" stop-opacity="0.5"/>
+    </radialGradient>
+    <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="4" dy="8" stdDeviation="6" flood-color="#000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Handle -->
+  <line x1="310" y1="310" x2="440" y2="440" stroke="url(#handleGradient)" stroke-width="50" stroke-linecap="round"/>
+
+  <!-- Rim -->
+  <circle cx="220" cy="220" r="140" fill="url(#rimGradient)" filter="url(#dropShadow)"/>
+  <circle cx="220" cy="220" r="120" fill="#FFFFFF"/>
+
+  <!-- Lens Background -->
+  <circle cx="220" cy="220" r="120" fill="url(#lensGradient)"/>
+
+  <!-- Pixel Art: Space Invader -->
+  <!-- Centered at 220,220. 11x8 pixels. Scale 14. Width=154, Height=112.
+       Start X = 220 - 77 = 143
+       Start Y = 220 - 56 = 164
+  -->
+  <g transform="translate(143, 164) scale(14)" fill="#be123c">
+    <!-- Row 0 -->
+    <rect x="2" y="0" width="1" height="1"/>
+    <rect x="8" y="0" width="1" height="1"/>
+    <!-- Row 1 -->
+    <rect x="3" y="1" width="1" height="1"/>
+    <rect x="7" y="1" width="1" height="1"/>
+    <!-- Row 2 -->
+    <rect x="2" y="2" width="7" height="1"/>
+    <!-- Row 3 -->
+    <rect x="1" y="3" width="2" height="1"/>
+    <rect x="4" y="3" width="3" height="1"/>
+    <rect x="8" y="3" width="2" height="1"/>
+    <!-- Row 4 -->
+    <rect x="0" y="4" width="11" height="1"/>
+    <!-- Row 5 -->
+    <rect x="0" y="5" width="1" height="1"/>
+    <rect x="2" y="5" width="7" height="1"/>
+    <rect x="10" y="5" width="1" height="1"/>
+    <!-- Row 6 -->
+    <rect x="0" y="6" width="1" height="1"/>
+    <rect x="2" y="6" width="1" height="1"/>
+    <rect x="8" y="6" width="1" height="1"/>
+    <rect x="10" y="6" width="1" height="1"/>
+    <!-- Row 7 -->
+    <rect x="3" y="7" width="2" height="1"/>
+    <rect x="6" y="7" width="2" height="1"/>
+  </g>
+
+  <!-- Lens Reflection -->
+  <path d="M150 150 Q 220 110 290 150" stroke="white" stroke-width="12" stroke-linecap="round" stroke-opacity="0.8" fill="none"/>
+  <circle cx="170" cy="170" r="8" fill="white" fill-opacity="0.9"/>
+</svg>

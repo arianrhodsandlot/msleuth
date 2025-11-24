@@ -119,18 +119,10 @@ export const apis = new OpenAPIHono()
       deprecated: true,
       method: 'get',
       path: 'platform/{name}',
-      request: {
-        params: z.object({
-          name: z.string(),
-        }),
-      },
+      request: { params: z.object({ name: z.string().openapi({ examples: ['nes', 'snes', 'megadrive', 'arcade'] }) }) },
       responses: {
         200: {
-          content: {
-            'application/json': {
-              schema: LaunchboxPlatformSchema.optional(),
-            },
-          },
+          content: { 'application/json': { schema: LaunchboxPlatformSchema.optional() } },
           description: 'Get platform info',
         },
       },

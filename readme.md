@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/msleuth.png" alt="logo" width="160" height="160">
+  <img src="docs/logo.svg" alt="logo" width="160" height="160">
   <h1 align="center">MSleuth</h1>
 </p>
 
@@ -37,6 +37,8 @@ Body: {
 }
 Response: [{ launchbox: {...}, libretro: {...} }]
 ```
+
+The API documentation is also available at [https://msleuth.arianrhodsandlot.workers.dev/](https://msleuth.arianrhodsandlot.workers.dev/).
 
 ## License
 MIT
