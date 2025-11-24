@@ -7,6 +7,8 @@ type Identify = HC['metadata']['identify']['$post']
 
 export type IdentifyParameter = Parameters<Identify>[0]['json']
 export type QueryParameter = Parameters<Query>[0]['json']
+export type IdentifyResponse = Awaited<ReturnType<typeof msleuth.identify>>
+export type QueryResponse = Awaited<ReturnType<typeof msleuth.query>>
 
 export function createClient(host = 'https://msleuth.arianrhodsandlot.workers.dev', options?: ClientRequestOptions) {
   const client = hc<typeof apis>(new URL('api/v1', host).href, options)
