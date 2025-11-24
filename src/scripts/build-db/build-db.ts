@@ -1,4 +1,5 @@
 import path from 'node:path'
+import { Database } from 'bun:sqlite'
 import { $ } from 'execa'
 import fs from 'fs-extra'
 
@@ -36,7 +37,11 @@ await fs.remove(path.join('msleuth.sqlite'))
 await fs.mkdirp(path.join(tmp, 'artifacts'))
 const drizzleConfigPath = path.join('src', 'database', 'drizzle.config.ts')
 await $$`drizzle-kit --config=${drizzleConfigPath} generate --name=init`
-await $$`drizzle-kit --config=${drizzleConfigPath} migrate`
+const migration = path.join('src', 'database', 'migrations', '0000_init.sql')
+const db = new Database('msleuth.sqlite')
+const sql = await fs.readFile(migration, 'utf8')
+db.run(sql)
+db.close()
 
 // Prepare data for the temporary database
 await $$`bun ${path.join(import.meta.dirname, 'extract-libretro-db.ts')}`
