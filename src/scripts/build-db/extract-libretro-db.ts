@@ -42,7 +42,17 @@ async function extractLibretroDb(rdbPath: string, db: BunSQLiteDatabase) {
   for (const [i, recordsChunk] of recordsChunks.entries()) {
     const values = recordsChunk
       .filter(({ name }) => name)
-      .map((record) => (Object.assign(mapKeys(record,(_value,key)=>camelCase(`${key}`)), {compactName:getCompactName(`${record.name}`),goodcodesBaseCompactName:getCompactName(parse(`0 - ${record.name}`).rom),id:crypto.hash(`sha1`,JSON.stringify({...record,platform})),platform})))
+      .map((record) =>
+        Object.assign(
+          mapKeys(record, (_value, key) => camelCase(`${key}`)),
+          {
+            compactName: getCompactName(`${record.name}`),
+            goodcodesBaseCompactName: getCompactName(parse(`0 - ${record.name}`).rom),
+            id: crypto.hash(`sha1`, JSON.stringify({ ...record, platform })),
+            platform,
+          },
+        ),
+      )
     if (values.length > 0) {
       console.info(`Inserting ${values.length} records for platform: ${platform} (${i + 1}/${recordsChunks.length})`)
       await db.insert(libretroGameTable).values(values).onConflictDoNothing()

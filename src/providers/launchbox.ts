@@ -24,7 +24,10 @@ export class LaunchboxProvider {
 
     const columns = ['compactName', 'goodcodesBaseCompactName'] as const
 
-    interface Filter { column: Column; values: (number | string)[] }
+    interface Filter {
+      column: Column
+      values: (number | string)[]
+    }
     const filters: Filter[] = columns.map((column) => ({
       column: launchboxGameTable[column],
       values: extendedFiles.map(({ [column]: value }) => value || '').filter(Boolean),
