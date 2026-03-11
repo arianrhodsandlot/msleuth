@@ -1,5 +1,5 @@
-import path from 'node:path'
 import { Database } from 'bun:sqlite'
+import path from 'node:path'
 import { $ } from 'execa'
 import fs from 'fs-extra'
 

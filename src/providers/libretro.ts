@@ -2,14 +2,14 @@ import path from 'node:path'
 import { and, inArray, or } from 'drizzle-orm'
 import { compact } from 'es-toolkit'
 import { parse } from 'goodcodes-parser'
-import { platformMap, type PlatformName } from '../constants/platform.ts'
+import { platformMap } from '../constants/platform.ts'
 import type { DB } from '../database/index.ts'
 import { libretroGameTable } from '../database/schema.ts'
 import type { ROMFile } from '../types/file.ts'
 import { executeQuery, getCompactName } from '../utils.ts'
 
 export class LibretroProvider {
-  private db: DB
+  private readonly db: DB
 
   constructor({ db }: { db: DB }) {
     this.db = db
@@ -58,7 +58,7 @@ export class LibretroProvider {
 
     const arcadeLibretroPlatforms = ['MAME', 'MAME 2003-Plus', 'FBNeo - Arcade Games']
     const libretroPlatforms =
-      platform === 'arcade' ? arcadeLibretroPlatforms : compact([platformMap[platform as PlatformName]?.libretroName])
+      platform === 'arcade' ? arcadeLibretroPlatforms : compact([platformMap[platform]?.libretroName])
     const query = this.db
       .select()
       .from(libretroGameTable)

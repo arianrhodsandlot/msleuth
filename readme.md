@@ -9,6 +9,7 @@ MSleuth is an API service for matching and fetching metadata for video game ROM 
 - **Query**: Retrieve stored metadata by known LaunchBox database IDs and Libretro identifiers.
 
 ## Usage
+
 MSleuth provides a lightweight HTTP server with the following endpoints:
 
 ```
@@ -41,4 +42,5 @@ Response: [{ launchbox: {...}, libretro: {...} }]
 The API documentation is also available at [https://msleuth.arianrhodsandlot.workers.dev/](https://msleuth.arianrhodsandlot.workers.dev/).
 
 ## License
+
 MIT

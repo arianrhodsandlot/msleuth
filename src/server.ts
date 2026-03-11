@@ -1,5 +1,5 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
-import { Scalar } from '@scalar/hono-api-reference'
+import { Scalar as scalar } from '@scalar/hono-api-reference'
 import { contextStorage } from 'hono/context-storage'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
@@ -11,7 +11,7 @@ const docPath = 'doc'
 export const app = new OpenAPIHono()
   .doc(docPath, { info: { title: 'MSleuth', version: '1' }, openapi: '3.2.0' })
   .use(logger(), contextStorage(), cors())
-  .get('', Scalar({ pageTitle: 'MSleuth', url: docPath }))
+  .get('', scalar({ pageTitle: 'MSleuth', url: docPath }))
   .get('favicon.ico', (c) =>
     c.body(favicon, 200, { 'Cache-Control': 'public, max-age=31536000', 'Content-Type': 'image/x-icon' }),
   )

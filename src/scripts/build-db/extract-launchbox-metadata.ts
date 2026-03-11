@@ -177,12 +177,13 @@ async function writeLaunchboxGameAlternateName(records: Records, db: BunSQLiteDa
       .values(
         recordsChunk
           .filter((record) => record.alternateName && getCompactName(record.alternateName))
-          .map((record) => ({
-            ...record,
-            compactName: getCompactName(record.alternateName),
-            databaseId: castInteger(record.databaseId),
-            id: crypto.hash('sha1', JSON.stringify(record)),
-          })),
+          .map((record) =>
+            Object.assign(record, {
+              compactName: getCompactName(record.alternateName),
+              databaseId: castInteger(record.databaseId),
+              id: crypto.hash(`sha1`, JSON.stringify(record)),
+            }),
+          ),
       )
       .onConflictDoNothing()
   }
@@ -197,18 +198,19 @@ async function writeLaunchboxGame(records: Records, db: BunSQLiteDatabase) {
     await db
       .insert(launchboxGameTable)
       .values(
-        recordsChunk.map((record) => ({
-          ...record,
-          communityRating: castDecimal(record.communityRating),
-          communityRatingCount: castInteger(record.communityRatingCount),
-          compactName: getCompactName(record.name),
-          cooperative: castBoolean(record.cooperative),
-          databaseId: castInteger(record.databaseId) as number,
-          goodcodesBaseCompactName: getCompactName(parse(`0 - ${record.name}`).rom),
-          maxPlayers: castInteger(record.maxPlayers),
-          name: record.name,
-          releaseDate: castDate(record.releaseDate),
-        })),
+        recordsChunk.map((record) =>
+          Object.assign(record, {
+            communityRating: castDecimal(record.communityRating),
+            communityRatingCount: castInteger(record.communityRatingCount),
+            compactName: getCompactName(record.name),
+            cooperative: castBoolean(record.cooperative),
+            databaseId: castInteger(record.databaseId) as number,
+            goodcodesBaseCompactName: getCompactName(parse(`0 - ${record.name}`).rom),
+            maxPlayers: castInteger(record.maxPlayers),
+            name: record.name,
+            releaseDate: castDate(record.releaseDate),
+          }),
+        ),
       )
       .onConflictDoNothing()
   }
@@ -230,11 +232,12 @@ const cachePathMap = {
 async function getMetadata() {
   if (loadMetadataFromCache) {
     try {
-      const metadata: Record<string, Records> = {}
-      metadata.Game = JSON.parse(await readFile(cachePathMap.Game, 'utf8'))
-      metadata.Platform = JSON.parse(await readFile(cachePathMap.Platform, 'utf8'))
-      metadata.PlatformAlternateName = JSON.parse(await readFile(cachePathMap.PlatformAlternateName, 'utf8'))
-      metadata.GameAlternateName = JSON.parse(await readFile(cachePathMap.GameAlternateName, 'utf8'))
+      const metadata: Record<string, Records> = {
+        Game: JSON.parse(await readFile(cachePathMap.Game, 'utf8')),
+        GameAlternateName: JSON.parse(await readFile(cachePathMap.GameAlternateName, 'utf8')),
+        Platform: JSON.parse(await readFile(cachePathMap.Platform, 'utf8')),
+        PlatformAlternateName: JSON.parse(await readFile(cachePathMap.PlatformAlternateName, 'utf8')),
+      }
       return metadata
     } catch {}
   }
