@@ -29,6 +29,7 @@ export const basePlatformMap: Record<string, BasePlatform> = {
   ngpc: { launchboxName: 'SNK Neo Geo Pocket Color', libretroName: 'SNK - Neo Geo Pocket Color' },
   odyssey2: { launchboxName: 'Magnavox Odyssey 2', libretroName: 'Magnavox - Odyssey2' },
   pcengine: { launchboxName: 'NEC TurboGrafx-16', libretroName: 'NEC - PC Engine - TurboGrafx 16' },
+  psx: { launchboxName: 'Sony Playstation', libretroName: 'Sony - PlayStation' },
   sega32x: { launchboxName: 'Sega 32X', libretroName: 'Sega - 32X' },
   sfc: {
     launchboxName: 'Super Nintendo Entertainment System',
