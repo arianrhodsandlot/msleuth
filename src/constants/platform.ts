@@ -24,6 +24,7 @@ export const basePlatformMap: Record<string, BasePlatform> = {
   megadrive: { launchboxName: 'Sega Genesis', libretroName: 'Sega - Mega Drive - Genesis' },
   msx: { launchboxName: 'Microsoft MSX', libretroName: 'Microsoft - MSX' },
   msx2: { launchboxName: 'Microsoft MSX2', libretroName: 'Microsoft - MSX2' },
+  n64: { launchboxName: 'Nintendo 64', libretroName: 'Nintendo - Nintendo 64' },
   nes: { launchboxName: 'Nintendo Entertainment System', libretroName: 'Nintendo - Nintendo Entertainment System' },
   ngp: { launchboxName: 'SNK Neo Geo Pocket', libretroName: 'SNK - Neo Geo Pocket' },
   ngpc: { launchboxName: 'SNK Neo Geo Pocket Color', libretroName: 'SNK - Neo Geo Pocket Color' },
