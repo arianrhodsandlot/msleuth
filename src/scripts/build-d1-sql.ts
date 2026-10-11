@@ -8,7 +8,6 @@ const subprocess = execa('sqlite3', [dbPath, '.dump'], { buffer: false })
 const writeStream = fs.createWriteStream(dumpedPath)
 subprocess.stdout.pipe(writeStream)
 const { promise, reject, resolve } = Promise.withResolvers()
-subprocess.catch(reject)
 writeStream.on('error', reject)
 writeStream.on('finish', resolve)
 await promise

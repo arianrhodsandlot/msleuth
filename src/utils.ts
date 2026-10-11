@@ -1,6 +1,3 @@
-import { sql } from 'drizzle-orm'
-import { env } from 'hono/adapter'
-import { getContext } from 'hono/context-storage'
 import json5 from 'json5'
 import type { DB } from './database/index.ts'
 
@@ -8,30 +5,16 @@ export function getCompactName(name: string) {
   return name.replaceAll(/[^\p{Letter}\p{Mark}\p{Number}]/gu, '').toLowerCase()
 }
 
-function checkIsProduction() {
-  let nodeenv
-  try {
-    nodeenv = env(getContext()).BUN_ENV || env(getContext()).WORKERD_ENV
-  } catch {}
-  return nodeenv === 'production'
-}
-
 export async function executeQuery<T>(db: DB, query: T) {
-  if (!checkIsProduction()) {
-    // @ts-expect-error
-    const plans = await db.all(sql`EXPLAIN QUERY PLAN ${query.getSQL()}`)
-    // @ts-expect-error
-    console.info(query.toSQL(), ...plans.map((plan: any) => plan.detail))
-  }
   return await query
 }
 
 export function restoreTitleForSorting(title: string) {
   // Match titles ending with ", A", ", An", or ", The" followed by optional additional info
-  const match = title.match(/^(.*),\s*(A|An|The)(\s*(?:\S.*)?)$/)
+  const match = title.match(/^(?<main>.*),\s*(?<article>A|An|The)(?<extra>\s*(?:\S.*)?)$/u)
   if (match) {
     // Reconstruct: article + space + main title + additional info
-    return `${match[2]} ${match[1]}${match[3]}`
+    return `${match.groups.article} ${match.groups.main}${match.groups.extra}`
   }
   // Return original string if no match
   return title

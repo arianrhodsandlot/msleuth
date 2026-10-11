@@ -119,15 +119,11 @@ function castBoolean(value: string) {
 }
 
 function castInteger(value) {
-  try {
-    return Number.parseInt(value, 10) || null
-  } catch {}
+  return Math.trunc(Number(value)) || null
 }
 
 function castDecimal(value) {
-  try {
-    return Number.parseFloat(value) || null
-  } catch {}
+  return Number(value) || null
 }
 
 function castDate(value) {

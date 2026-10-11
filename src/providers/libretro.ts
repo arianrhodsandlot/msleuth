@@ -29,7 +29,7 @@ export class LibretroProvider {
     return files.map((file, index) => md5Results[index] || nameResults[index])
   }
 
-  private getExtendedFiles(files: ROMFile[]) {
+  private static getExtendedFiles(files: ROMFile[]) {
     const extendedFiles = files.map((file) => {
       const { name } = path.parse(file.name || '')
       const compactName = getCompactName(name)
@@ -45,7 +45,7 @@ export class LibretroProvider {
     files: ROMFile[],
     columns: readonly ('compactName' | 'goodcodesBaseCompactName' | 'md5' | 'name' | 'romName')[],
   ) {
-    const extendedFiles = this.getExtendedFiles(files)
+    const extendedFiles = LibretroProvider.getExtendedFiles(files)
 
     const filters = columns.map((column) => ({
       column: libretroGameTable[column],
