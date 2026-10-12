@@ -41,7 +41,7 @@
     "@arianrhodsandlot/oxc-config": "^1.2.7",
     "@arianrhodsandlot/vite-plus-config": "1.3.3",
     "@tsconfig/bun": "1.0.11",
-    "@types/bun": "1.4.2",
+    "@types/bun": "1.4.3",
     "@types/fs-extra": "11.0.4",
     "@types/node": "26.6.5",
     "@types/pug": "2.0.10",

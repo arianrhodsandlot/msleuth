@@ -36,8 +36,10 @@ await Promise.all([
 await fs.remove(path.join('msleuth.sqlite'))
 await fs.mkdirp(path.join(tmp, 'artifacts'))
 const drizzleConfigPath = path.join('src', 'database', 'drizzle.config.ts')
+const migrationsDir = path.join('src', 'database', 'migrations')
+await fs.remove(migrationsDir)
 await $$`drizzle-kit --config=${drizzleConfigPath} generate --name=init`
-const migration = path.join('src', 'database', 'migrations', '0000_init.sql')
+const migration = path.join(migrationsDir, '0000_init.sql')
 const db = new Database('msleuth.sqlite')
 const sql = await fs.readFile(migration, 'utf8')
 db.run(sql)
