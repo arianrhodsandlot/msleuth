@@ -6,7 +6,7 @@
     {
       "binding": "MSLEUTH_DB",
       "database_id": "${MSLEUTH_DB_DATABASE_ID}",
-      "database_name": "msleuth-db",
+      "database_name": "${MSLEUTH_DB_DATABASE_NAME}",
       "migrations_dir": "src/database/migrations"
     }
   ],
